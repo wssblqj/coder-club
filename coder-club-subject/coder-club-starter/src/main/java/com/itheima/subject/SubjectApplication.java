@@ -9,6 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @ComponentScan("com.itheima")
 @MapperScan("com.itheima.**.mapper")
+@MapperScan("com.itheima.**.dao")
 public class SubjectApplication {
     public static void main(String[] args) {
         SpringApplication.run(SubjectApplication.class);

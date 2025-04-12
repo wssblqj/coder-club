@@ -1,19 +1,18 @@
 package com.itheima.subject.infra.basic.mapper;
 
-import com.itheima.subject.infra.basic.entity.SubjectCategory;
-import org.apache.ibatis.annotations.Mapper;
+import com.itheima.subject.infra.basic.entity.SubjectMultiple;
 import org.apache.ibatis.annotations.Param;
 
 import java.awt.print.Pageable;
 import java.util.List;
 
 /**
- * 题目类型表(SubjectCategory)表数据库访问层
+ * 多选题信息表(SubjectMultiple)表数据库访问层
  *
  * @author makejava
- * @since 2025-03-14 17:29:28
+ * @since 2025-04-10 12:18:35
  */
-public interface SubjectCategoryDao {
+public interface SubjectMultipleDao {
 
     /**
      * 通过ID查询单条数据
@@ -21,48 +20,56 @@ public interface SubjectCategoryDao {
      * @param id 主键
      * @return 实例对象
      */
-    SubjectCategory queryById(Long id);
+    SubjectMultiple queryById(Long id);
+
+    /**
+     * 查询指定行数据
+     *
+     * @param subjectMultiple 查询条件
+     * @return 对象列表
+     */
+    List<SubjectMultiple> queryAllByLimit(SubjectMultiple subjectMultiple);
 
     /**
      * 统计总行数
      *
-     * @param subjectCategory 查询条件
+     * @param subjectMultiple 查询条件
      * @return 总行数
      */
-    long count(SubjectCategory subjectCategory);
+    long count(SubjectMultiple subjectMultiple);
 
     /**
      * 新增数据
      *
-     * @param subjectCategory 实例对象
+     * @param subjectMultiple 实例对象
      * @return 影响行数
      */
-    int insert(SubjectCategory subjectCategory);
+    int insert(SubjectMultiple subjectMultiple);
 
     /**
      * 批量新增数据（MyBatis原生foreach方法）
      *
-     * @param entities List<SubjectCategory> 实例对象列表
+     * @param entities List<SubjectMultiple> 实例对象列表
      * @return 影响行数
      */
-    int insertBatch(@Param("entities") List<SubjectCategory> entities);
+    int insertBatch(@Param("entities") List<SubjectMultiple> entities);
 
     /**
      * 批量新增或按主键更新数据（MyBatis原生foreach方法）
      *
-     * @param entities List<SubjectCategory> 实例对象列表
+     * @param entities List<SubjectMultiple> 实例对象列表
      * @return 影响行数
      * @throws org.springframework.jdbc.BadSqlGrammarException 入参是空List的时候会抛SQL语句错误的异常，请自行校验入参
      */
-    int insertOrUpdateBatch(@Param("entities") List<SubjectCategory> entities);
+    int insertOrUpdateBatch(@Param("entities") List<SubjectMultiple> entities);
 
     /**
      * 修改数据
      *
-     * @param subjectCategory 实例对象
+     * @param subjectMultiple 实例对象
      * @return 影响行数
      */
-    int update(SubjectCategory subjectCategory);
+    int update(SubjectMultiple subjectMultiple);
 
     /**
      * 通过主键删除数据
@@ -72,10 +79,5 @@ public interface SubjectCategoryDao {
      */
     int deleteById(Long id);
 
-    /**
-     * 查询大类类别
-     * @return
-     */
-    List<SubjectCategory> queryCategory(SubjectCategory subjectCategory);
 }
 
