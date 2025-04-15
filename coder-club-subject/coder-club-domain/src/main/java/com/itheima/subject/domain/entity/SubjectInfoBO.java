@@ -1,5 +1,6 @@
 package com.itheima.subject.domain.entity;
 
+import com.itheima.subject.common.entity.PageInfo;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -9,7 +10,7 @@ import java.util.List;
  * 题目标签BO
  */
 @Data
-public class SubjectInfoBO implements Serializable {
+public class SubjectInfoBO extends PageInfo implements Serializable {
     /**
      * 主键
      */
@@ -54,7 +55,22 @@ public class SubjectInfoBO implements Serializable {
     private List<Integer> labelIds;
 
     /**
+     * 标签name
+     */
+    private List<String> labelName;
+
+    /**
      * 答案选项
      */
     private List<SubjectAnswerBO> optionList;
+
+    /**
+     *  分类id
+     */
+    private Long categoryId;
+
+    /**
+     * 标签id
+     */
+    private Long labelId;
 }

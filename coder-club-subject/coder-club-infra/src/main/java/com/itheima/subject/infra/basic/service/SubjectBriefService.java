@@ -41,4 +41,10 @@ public interface SubjectBriefService {
      */
     boolean deleteById(Long id);
 
+    /**
+     * 根据题目id查询
+     * @param aLong
+     * @return
+     */
+    SubjectBrief queryBySubjectId(Long aLong);
 }

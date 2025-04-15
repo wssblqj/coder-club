@@ -36,17 +36,17 @@ public interface SubjectMultipleService {
      */
     SubjectMultiple update(SubjectMultiple subjectMultiple);
 
-    /**
-     * 通过主键删除数据
-     *
-     * @param id 主键
-     * @return 是否成功
-     */
-    boolean deleteById(Long id);
 
     /**
      * 批量插入
      * @param subjectMultipleList
      */
     void batchInsert(List<SubjectMultiple> subjectMultipleList);
+
+    /**
+     * 根据题目id查询选项
+     * @param aLong
+     * @return
+     */
+    List<SubjectMultiple> queryBySubjectId(Long aLong);
 }

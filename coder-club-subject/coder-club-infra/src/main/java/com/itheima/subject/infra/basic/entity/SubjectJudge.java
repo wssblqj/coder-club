@@ -41,7 +41,12 @@ public class SubjectJudge implements Serializable {
     /**
      * 更新时间
      */
-    private Date update;
+    private Date updateTime;
+
+    /**
+     * 删除标识
+     */
+    private Integer isDeleted;
 
 }
 

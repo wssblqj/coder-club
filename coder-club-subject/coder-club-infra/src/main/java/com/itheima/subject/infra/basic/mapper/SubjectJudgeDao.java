@@ -79,5 +79,6 @@ public interface SubjectJudgeDao {
      */
     int deleteById(Long id);
 
+    SubjectJudge queryBySubjectId();
 }
 

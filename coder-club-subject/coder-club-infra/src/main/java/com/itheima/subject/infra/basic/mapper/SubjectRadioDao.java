@@ -1,5 +1,6 @@
 package com.itheima.subject.infra.basic.mapper;
 
+import com.itheima.subject.infra.basic.entity.SubjectMultiple;
 import com.itheima.subject.infra.basic.entity.SubjectRadio;
 import org.apache.ibatis.annotations.Param;
 
@@ -79,5 +80,11 @@ public interface SubjectRadioDao {
      */
     int deleteById(Long id);
 
+    /**
+     *
+     * @param subjectId
+     * @return
+     */
+    List<SubjectRadio> queryBySubjectId(Long subjectId);
 }
 

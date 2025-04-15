@@ -1,8 +1,11 @@
 package com.itheima.subject.domain.handler.subject;
 
+import com.itheima.subject.common.enums.IsDeleteFlagEnum;
 import com.itheima.subject.common.enums.SubjectInfoTypeEnum;
 import com.itheima.subject.domain.convert.JudgeSubjectConverter;
+import com.itheima.subject.domain.entity.SubjectAnswerBO;
 import com.itheima.subject.domain.entity.SubjectInfoBO;
+import com.itheima.subject.domain.entity.SubjectOptionBO;
 import com.itheima.subject.infra.basic.entity.SubjectJudge;
 import com.itheima.subject.infra.basic.service.SubjectJudgeService;
 import org.springframework.stereotype.Component;
@@ -30,8 +33,21 @@ public class JudgeTypeHandler implements SubjectTypeHandler{
         subjectInfoBO.getOptionList().forEach(option -> {
             SubjectJudge subjectJudge = JudgeSubjectConverter.INSTANCE.convertBoToEntity(option);
             subjectJudge.setSubjectId(subjectInfoBO.getId());
+            subjectJudge.setIsDeleted(IsDeleteFlagEnum.UN_DELETED.getCode());
             judgeList.add(subjectJudge);
         });
         subjectJudgeService.batchInsert(judgeList);
+    }
+
+    @Override
+    public SubjectOptionBO querySubjectInfo(int subjectId) {
+        SubjectJudge subjectJudge = subjectJudgeService.queryBySubjectId(Long.valueOf(subjectId));
+        SubjectOptionBO subjectOptionBO = new SubjectOptionBO();
+        List<SubjectAnswerBO> list = new ArrayList<>();
+        SubjectAnswerBO subjectAnswerBO = new SubjectAnswerBO();
+        subjectAnswerBO.setIsCorrect(subjectJudge.getIsCorrect());
+        list.add(subjectAnswerBO);
+        subjectOptionBO.setOptionList(list);
+        return subjectOptionBO;
     }
 }

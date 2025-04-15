@@ -10,6 +10,12 @@
     </parent>
 
     <artifactId>coder-club-application</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>coder-club-application-controller</module>
+        <module>coder-club-application-mq</module>
+        <module>coder-club-application-job</module>
+    </modules>
 
 
 </project>

@@ -16,9 +16,7 @@
         <module>coder-club-common</module>
         <module>coder-club-infra</module>
         <module>coder-club-starter</module>
-        <module>coder-club-application/coder-club-application-controller</module>
-        <module>coder-club-application/coder-club-application-job</module>
-        <module>coder-club-application/coder-club-application-mq</module>
+
     </modules>
     <dependencies>
         <dependency>
@@ -28,7 +26,6 @@
             <type>pom</type>
             <scope>import</scope>
         </dependency>
-
     </dependencies>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>

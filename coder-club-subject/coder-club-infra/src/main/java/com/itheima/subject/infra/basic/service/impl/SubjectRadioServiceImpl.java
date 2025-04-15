@@ -1,5 +1,6 @@
 package com.itheima.subject.infra.basic.service.impl;
 
+import com.itheima.subject.infra.basic.entity.SubjectMultiple;
 import com.itheima.subject.infra.basic.entity.SubjectRadio;
 import com.itheima.subject.infra.basic.mapper.SubjectRadioDao;
 import com.itheima.subject.infra.basic.service.SubjectRadioService;
@@ -68,5 +69,10 @@ public class SubjectRadioServiceImpl implements SubjectRadioService {
     @Override
     public void batchInsert(List<SubjectRadio> subjectRadioList) {
         this.subjectRadioDao.insertBatch(subjectRadioList);
+    }
+
+    @Override
+    public List<SubjectRadio> queryBySubjectId(Long subjectId) {
+        return this.subjectRadioDao.queryBySubjectId(subjectId);
     }
 }

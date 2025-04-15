@@ -1,5 +1,6 @@
 package com.itheima.subject.application.dto;
 
+import com.itheima.subject.common.entity.PageInfo;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -10,7 +11,7 @@ import java.util.List;
  * 题目DTO
  */
 @Data
-public class SubjectInfoDTO implements Serializable {
+public class SubjectInfoDTO extends PageInfo implements Serializable {
     /**
      * 主键
      */
@@ -45,17 +46,32 @@ public class SubjectInfoDTO implements Serializable {
     private String subjectAnswer;
 
     /**
-     * 分类id
+     * 分类id列表
      */
     private List<Integer> categoryIds;
 
     /**
-     * 标签id
+     * 标签id列表
      */
     private List<Integer> labelIds;
+
+    /**
+     * 标签name
+     */
+    private List<String> labelName;
 
     /**
      * 答案选项
      */
     private List<SubjectAnswerDTO> optionList;
+
+    /**
+     *  分类id
+     */
+    private Long categoryId;
+
+    /**
+     * 标签id
+     */
+    private Long labelId;
 }

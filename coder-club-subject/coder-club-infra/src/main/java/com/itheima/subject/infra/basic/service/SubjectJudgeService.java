@@ -49,4 +49,6 @@ public interface SubjectJudgeService {
      * @param judgeList
      */
     void batchInsert(List<SubjectJudge> judgeList);
+
+    SubjectJudge queryBySubjectId(Long aLong);
 }

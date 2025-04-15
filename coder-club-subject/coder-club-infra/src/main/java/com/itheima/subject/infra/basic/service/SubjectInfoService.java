@@ -3,6 +3,8 @@ package com.itheima.subject.infra.basic.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.itheima.subject.infra.basic.entity.SubjectInfo;
 
+import java.util.List;
+
 
 /**
  * 题目信息表(SubjectInfo)表服务接口
@@ -44,4 +46,15 @@ public interface SubjectInfoService {
      */
     boolean deleteById(Long id);
 
+    /**
+     * 分页查询题目
+     * @param subjectInfo
+     * @param categoryId
+     * @param labelId
+     * @return
+     */
+    int countByCondition(SubjectInfo subjectInfo, Long categoryId, Long labelId);
+
+
+    List<SubjectInfo> queryPage(SubjectInfo subjectInfo, Long categoryId, Long labelId, int start, int pageSize);
 }

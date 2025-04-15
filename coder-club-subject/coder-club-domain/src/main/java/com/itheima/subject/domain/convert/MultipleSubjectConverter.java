@@ -12,4 +12,6 @@ public interface MultipleSubjectConverter {
     MultipleSubjectConverter INSTANCE = Mappers.getMapper(MultipleSubjectConverter.class);
 
     SubjectMultiple convertBoToEntity(SubjectAnswerBO subjectAnswerBO);
+
+    SubjectAnswerBO convertEntityToAnswerBo(SubjectMultiple subjectMultiple);
 }

@@ -1,5 +1,6 @@
 package com.itheima.subject.infra.basic.service;
 
+import com.itheima.subject.infra.basic.entity.SubjectMultiple;
 import com.itheima.subject.infra.basic.entity.SubjectRadio;
 
 import java.util.List;
@@ -50,4 +51,10 @@ public interface SubjectRadioService {
      * @param subjectRadioList
      */
     void batchInsert(List<SubjectRadio> subjectRadioList);
+
+    /**
+     * @param aLong
+     * @return
+     */
+    List<SubjectRadio> queryBySubjectId(Long aLong);
 }

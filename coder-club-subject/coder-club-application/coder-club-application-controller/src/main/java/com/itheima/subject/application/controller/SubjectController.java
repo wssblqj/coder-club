@@ -7,6 +7,7 @@ import com.itheima.subject.application.convert.SubjectCategoryDTOConverter;
 import com.itheima.subject.application.convert.SubjectInfoDTOConverter;
 import com.itheima.subject.application.dto.SubjectCategoryDTO;
 import com.itheima.subject.application.dto.SubjectInfoDTO;
+import com.itheima.subject.common.entity.PageResult;
 import com.itheima.subject.common.entity.Result;
 import com.itheima.subject.domain.entity.SubjectAnswerBO;
 import com.itheima.subject.domain.entity.SubjectCategoryBO;
@@ -56,6 +57,41 @@ public class SubjectController {
             log.error("SubjectCategoryController.add.error: {}", e.getMessage());
             return Result.fail(e.getMessage());
 
+        }
+    }
+
+    @PostMapping("/querySubjectList")
+    public Result<PageResult<SubjectInfoDTO>> querySubjectList(@RequestBody SubjectInfoDTO subjectInfoDTO) {
+        try {
+            if (log.isInfoEnabled()) {
+                log.info("SubjectCategoryController.querySubjectList.dto: {}", JSON.toJSONString(subjectInfoDTO));
+            }
+            Preconditions.checkNotNull(subjectInfoDTO.getCategoryId(), "分类id不能为空");
+            Preconditions.checkNotNull(subjectInfoDTO.getSubjectDifficult(), "题目难度不能为空");
+            SubjectInfoBO subjectInfoBO = SubjectInfoDTOConverter.INSTANCE.convertDtoToBo(subjectInfoDTO);
+            PageResult<SubjectInfoBO> boPageResult = subjectInfoDomainService.getSubjectPage(subjectInfoBO);
+            return Result.ok(boPageResult);
+        } catch (Exception e) {
+            log.error("SubjectCategoryController.querySubjectList.error: {}", e.getMessage());
+            return Result.fail(e.getMessage());
+
+        }
+    }
+
+    @PostMapping("/querySubjectInfo")
+    public Result<SubjectInfoDTO> querySubjectInfo(@RequestBody SubjectInfoDTO subjectInfoDTO) {
+        try {
+            if (log.isInfoEnabled()) {
+                log.info("SubjectCategoryController.querySubjectInfo.dto: {}", JSON.toJSONString(subjectInfoDTO));
+            }
+            Preconditions.checkNotNull(subjectInfoDTO.getId(), "题目id不能为空");
+            SubjectInfoBO subjectInfoBO = SubjectInfoDTOConverter.INSTANCE.convertDtoToBo(subjectInfoDTO);
+            SubjectInfoBO resultBo = subjectInfoDomainService.querySubjectInfo(subjectInfoBO);
+            SubjectInfoDTO resultDto = SubjectInfoDTOConverter.INSTANCE.convertBoToDto(resultBo);
+            return Result.ok(resultDto);
+        } catch (Exception e) {
+            log.error("SubjectCategoryController.querySubjectInfo.error: {}", e.getMessage());
+            return Result.fail(e.getMessage());
         }
     }
 

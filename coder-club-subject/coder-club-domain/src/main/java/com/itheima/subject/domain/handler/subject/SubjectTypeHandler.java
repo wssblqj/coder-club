@@ -2,6 +2,7 @@ package com.itheima.subject.domain.handler.subject;
 
 import com.itheima.subject.common.enums.SubjectInfoTypeEnum;
 import com.itheima.subject.domain.entity.SubjectInfoBO;
+import com.itheima.subject.domain.entity.SubjectOptionBO;
 
 public interface SubjectTypeHandler {
     /**
@@ -15,4 +16,12 @@ public interface SubjectTypeHandler {
      * @param subjectInfoBO
      */
     void add(SubjectInfoBO subjectInfoBO);
+
+
+    /**
+     * 实际的题目查询
+     * @param subjectId
+     * @return
+     */
+    SubjectOptionBO querySubjectInfo(int subjectId);
 }

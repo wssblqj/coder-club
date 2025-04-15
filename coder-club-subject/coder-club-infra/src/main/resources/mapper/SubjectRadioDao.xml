@@ -16,8 +16,15 @@
 
     <!--查询单个-->
     <select id="queryById" resultMap="SubjectRadioMap">
-        select
-id, subject_id, option_type, option_content, is_correct, created_by, created_time, update_by, update_time
+        select id,
+               subject_id,
+               option_type,
+               option_content,
+               is_correct,
+               created_by,
+               created_time,
+               update_by,
+               update_time
         from subject_radio
         where id = #{id}
     </select>
@@ -25,7 +32,7 @@ id, subject_id, option_type, option_content, is_correct, created_by, created_tim
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="SubjectRadioMap">
         select
-id, subject_id, option_type, option_content, is_correct, created_by, created_time, update_by, update_time
+        id, subject_id, option_type, option_content, is_correct, created_by, created_time, update_by, update_time
         from subject_radio
         <where>
             <if test="id != null">
@@ -93,36 +100,53 @@ id, subject_id, option_type, option_content, is_correct, created_by, created_tim
             </if>
         </where>
     </select>
+    <select id="queryBySubjectId" resultType="com.itheima.subject.infra.basic.entity.SubjectRadio">
+        select
+        id, subject_id, option_type, option_content, is_correct, created_by, created_time, update_by, update_time, is_deleted
+        from subject_radio
+        <where>
+            <if test="subjectId != null">
+                and subject_id = #{subjectId}
+            </if>
+        </where>
+    </select>
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into subject_radio(subject_id, option_type, option_content, is_correct, created_by, created_time, update_by, update_time)
-        values (#{subjectId}, #{optionType}, #{optionContent}, #{isCorrect}, #{createdBy}, #{createdTime}, #{updateBy}, #{updateTime})
+        insert into subject_radio(subject_id, option_type, option_content, is_correct, created_by, created_time,
+                                  update_by, update_time)
+        values (#{subjectId}, #{optionType}, #{optionContent}, #{isCorrect}, #{createdBy}, #{createdTime}, #{updateBy},
+                #{updateTime})
     </insert>
 
     <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into subject_radio(subject_id, option_type, option_content, is_correct, created_by, created_time, update_by, update_time)
+        insert into subject_radio(subject_id, option_type, option_content, is_correct, created_by, created_time,
+        update_by, update_time, is_deleted)
         values
         <foreach collection="entities" item="entity" separator=",">
-        (#{entity.subjectId}, #{entity.optionType}, #{entity.optionContent}, #{entity.isCorrect}, #{entity.createdBy}, #{entity.createdTime}, #{entity.updateBy}, #{entity.updateTime})
+            (#{entity.subjectId}, #{entity.optionType}, #{entity.optionContent},
+             #{entity.isCorrect}, #{entity.createdBy}, #{entity.createdTime},
+             #{entity.updateBy}, #{entity.updateTime}, #{entity.isDeleted})
         </foreach>
     </insert>
 
     <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into subject_radio(subject_id, option_type, option_content, is_correct, created_by, created_time, update_by, update_time)
+        insert into subject_radio(subject_id, option_type, option_content, is_correct, created_by, created_time,
+        update_by, update_time)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.subjectId}, #{entity.optionType}, #{entity.optionContent}, #{entity.isCorrect}, #{entity.createdBy}, #{entity.createdTime}, #{entity.updateBy}, #{entity.updateTime})
+            (#{entity.subjectId}, #{entity.optionType}, #{entity.optionContent}, #{entity.isCorrect},
+            #{entity.createdBy}, #{entity.createdTime}, #{entity.updateBy}, #{entity.updateTime})
         </foreach>
         on duplicate key update
-subject_id = values(subject_id),
-option_type = values(option_type),
-option_content = values(option_content),
-is_correct = values(is_correct),
-created_by = values(created_by),
-created_time = values(created_time),
-update_by = values(update_by),
-update_time = values(update_time)
+        subject_id = values(subject_id),
+        option_type = values(option_type),
+        option_content = values(option_content),
+        is_correct = values(is_correct),
+        created_by = values(created_by),
+        created_time = values(created_time),
+        update_by = values(update_by),
+        update_time = values(update_time)
     </insert>
 
     <!--通过主键修改数据-->
@@ -159,7 +183,9 @@ update_time = values(update_time)
 
     <!--通过主键删除-->
     <delete id="deleteById">
-        delete from subject_radio where id = #{id}
+        delete
+        from subject_radio
+        where id = #{id}
     </delete>
 
 </mapper>

@@ -5,6 +5,7 @@ import com.itheima.subject.infra.basic.mapper.SubjectMultipleDao;
 import com.itheima.subject.infra.basic.service.SubjectMultipleService;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -53,19 +54,13 @@ public class SubjectMultipleServiceImpl implements SubjectMultipleService {
         return this.queryById(subjectMultiple.getId());
     }
 
-    /**
-     * 通过主键删除数据
-     *
-     * @param id 主键
-     * @return 是否成功
-     */
-    @Override
-    public boolean deleteById(Long id) {
-        return this.subjectMultipleDao.deleteById(id) > 0;
-    }
-
     @Override
     public void batchInsert(List<SubjectMultiple> subjectMultipleList) {
         this.subjectMultipleDao.insertBatch(subjectMultipleList);
+    }
+
+    @Override
+    public List<SubjectMultiple> queryBySubjectId(Long subjectId) {
+        return this.subjectMultipleDao.queryBySubjectId(subjectId);
     }
 }

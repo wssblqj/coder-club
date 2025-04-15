@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Data
 public class SubjectInfo implements Serializable {
     private static final long serialVersionUID = -34002189920640494L;
-     /**
+    /**
      * 主键
      */
     private Long id;
@@ -58,6 +58,11 @@ public class SubjectInfo implements Serializable {
      * 更新时间
      */
     private String updateTime;
+
+    /**
+     * 删除标识
+     */
+    private Integer isDeleted;
 
 }
 

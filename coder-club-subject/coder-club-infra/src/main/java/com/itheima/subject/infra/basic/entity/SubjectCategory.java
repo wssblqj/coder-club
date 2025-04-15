@@ -52,7 +52,7 @@ public class SubjectCategory implements Serializable {
     private Date updateTime;
 
     /**
-     * 是否删除
+     * 删除标识
      */
     private Integer isDeleted;
 
