@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -77,8 +78,20 @@ public class SubjectLabelServiceImpl implements SubjectLabelService {
         return this.subjectLabelDao.deleteById(id) > 0;
     }
 
+    /**
+     * 通过主键查询单条数据
+     *
+     * @param labelIdList 主键
+     * @return 实例对象
+     */
     @Override
     public List<SubjectLabel> queryByIds(List<Long> labelIdList) {
         return this.subjectLabelDao.queryByIds(labelIdList);
+    }
+
+
+    @Override
+    public List<SubjectLabel> queryByCondition(SubjectLabel subjectLabel) {
+        return this.subjectLabelDao.queryByCondition(subjectLabel);
     }
 }

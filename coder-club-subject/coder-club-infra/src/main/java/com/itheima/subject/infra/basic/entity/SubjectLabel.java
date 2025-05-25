@@ -52,5 +52,6 @@ public class SubjectLabel implements Serializable {
      */
     private Integer isDeleted;
 
+
 }
 

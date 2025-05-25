@@ -5,6 +5,7 @@
     <resultMap type="com.itheima.subject.infra.basic.entity.SubjectLabel" id="SubjectLabelMap">
         <result property="id" column="id" jdbcType="INTEGER"/>
         <result property="labelName" column="label_name" jdbcType="VARCHAR"/>
+        <result property="categoryId" column="category_id" jdbcType="INTEGER"/>
         <result property="sortNum" column="sort_num" jdbcType="INTEGER"/>
         <result property="createdBy" column="created_by" jdbcType="VARCHAR"/>
         <result property="createdTime" column="created_time" jdbcType="TIMESTAMP"/>
@@ -16,6 +17,7 @@
     <select id="queryById" resultMap="SubjectLabelMap">
         select id,
                label_name,
+               category_id,
                sort_num,
                created_by,
                created_time,
@@ -29,7 +31,7 @@
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="SubjectLabelMap">
         select
-        id, label_name, sort_num, created_by, created_time, update_by, update_time
+        id, label_name, category_id, sort_num, created_by, created_time, update_by, update_time
         from subject_label
         <where>
             <if test="id != null">
@@ -37,6 +39,9 @@
             </if>
             <if test="labelName != null and labelName != ''">
                 and label_name = #{labelName}
+            </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
             </if>
             <if test="sortNum != null">
                 and sort_num = #{sortNum}
@@ -68,6 +73,9 @@
             <if test="labelName != null and labelName != ''">
                 and label_name = #{labelName}
             </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
             <if test="sortNum != null">
                 and sort_num = #{sortNum}
             </if>
@@ -87,18 +95,49 @@
     </select>
     <select id="queryByIds" resultMap="SubjectLabelMap">
         select
-        id, label_name, sort_num, created_by, created_time, update_by, update_time, is_deleted
+        id, label_name, category_id, sort_num, created_by, created_time, update_by, update_time, is_deleted
         from subject_label
         where id in
         <foreach open="(" collection="list" item="id" separator="," close=")">
             #{id}
         </foreach>
     </select>
+    <select id="queryByCondition" resultType="com.itheima.subject.infra.basic.entity.SubjectLabel">
+        select
+        id, label_name, category_id, sort_num, created_by, created_time, update_by, update_time, is_deleted
+        from subject_label
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="labelName != null and labelName != ''">
+                and label_name = #{labelName}
+            </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+            <if test="sortNum != null">
+                and sort_num = #{sortNum}
+            </if>
+            <if test="createdBy != null and createdBy != ''">
+                and created_by = #{createdBy}
+            </if>
+            <if test="createdTime != null">
+                and created_time = #{createdTime}
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                and update_by = #{updateBy}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into subject_label(label_name, sort_num, created_by, created_time, update_by, update_time, is_deleted)
-        values (#{labelName}, #{sortNum}, #{createdBy}, #{createdTime}, #{updateBy}, #{updateTime}, #{isDeleted})
+        insert into subject_label(label_name, sort_num, category_id, created_by, created_time, update_by, update_time, is_deleted)
+        values (#{labelName}, #{sortNum}, #{categoryId}, #{createdBy}, #{createdTime}, #{updateBy}, #{updateTime}, #{isDeleted})
     </insert>
 
     <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">

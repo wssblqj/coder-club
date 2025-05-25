@@ -52,4 +52,9 @@ public interface SubjectLabelService {
      * 根据labelIds查询label
      */
     List<SubjectLabel> queryByIds(List<Long> labelIdList);
+
+    /**
+     * 根据条件查询label
+     */
+    List<SubjectLabel> queryByCondition(SubjectLabel subjectLabel);
 }
