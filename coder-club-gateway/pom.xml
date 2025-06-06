@@ -5,17 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
-    <artifactId>coder-club-auth</artifactId>
+    <artifactId>coder-club-gateway</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
-    <modules>
-        <module>coder-club-auth-api</module>
-        <module>coder-club-auth-application</module>
-        <module>coder-club-auth-common</module>
-        <module>coder-club-auth-domain</module>
-        <module>coder-club-auth-infra</module>
-        <module>coder-club-auth-starter</module>
-    </modules>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
