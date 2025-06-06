@@ -1,4 +1,4 @@
-package com.itheima.subject;
+package com.itheima.auth;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -8,9 +8,8 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @ComponentScan("com.itheima")
 @MapperScan("com.itheima.**.mapper")
-@MapperScan("com.itheima.**.dao")
-public class SubjectApplication {
+public class AuthApplication {
     public static void main(String[] args) {
-        SpringApplication.run(SubjectApplication.class);
+        SpringApplication.run(AuthApplication.class, args);
     }
 }
