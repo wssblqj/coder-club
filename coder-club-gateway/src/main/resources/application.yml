@@ -1,0 +1,15 @@
+server:
+  port: 8085
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: oss
+          uri: lb://coder-club-oss
+          predicates:
+            - Path=/oss/**
+          filters:
+            - StripPrefix=1
+
+
+
