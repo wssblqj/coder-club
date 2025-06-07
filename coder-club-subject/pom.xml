@@ -16,7 +16,6 @@
         <module>coder-club-common</module>
         <module>coder-club-infra</module>
         <module>coder-club-starter</module>
-
     </modules>
     <dependencies>
         <dependency>
