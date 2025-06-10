@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="coder-club-auth-application-controller" />
+        <module name="coder-club-infra" />
+        <module name="coder-club-oss" />
+        <module name="coder-club-common" />
+        <module name="coder-club-application-job" />
+        <module name="coder-club-auth-infra" />
+        <module name="coder-club-auth-application-mq" />
+        <module name="coder-club-auth-common" />
+        <module name="coder-club-subject-api" />
+        <module name="coder-club-auth-api" />
+        <module name="coder-club-auth-application-job" />
+        <module name="coder-club-starter" />
+        <module name="coder-club-application-controller" />
+        <module name="coder-club-auth-starter" />
+        <module name="coder-club-gateway" />
+        <module name="coder-club-auth-domain" />
+        <module name="coder-club-application-mq" />
+        <module name="coder-club-domain" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel target="8" />
+  </component>
+</project>

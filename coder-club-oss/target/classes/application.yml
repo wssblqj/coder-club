@@ -1,0 +1,25 @@
+server:
+  port: 8082
+
+minio:
+  url: http://192.168.79.135:9000
+  accessKey: minioadmin
+  secretKey: minioadmin
+
+#storage:
+#  type: minio
+
+#nacos:
+#  config:
+#    secret-key: nacos
+#    access-key: nacos
+#    data-id: coder-club-oss
+#    group: DEFAULT_GROUP
+#    type: yaml
+#    server-addr: http://192.168.79.135:8848/
+#    auto-refresh: true
+#    remote-first: true
+#    bootstrap:
+#      enable: true
+
+
