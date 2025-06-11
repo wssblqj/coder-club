@@ -85,6 +85,36 @@ id, role_name, role_key, created_by, created_time, update_by, update_time, is_de
     </insert>
 
     <!--通过主键修改数据-->
+    <select id="queryAllByLimit" resultMap="AuthRoleMap">
+        select
+            id, role_name, role_key, created_by, created_time, update_by, update_time, is_deleted
+        from auth_role
+        <where>
+            <if test="roleName != null and roleName != ''">
+                role_name = #{roleName}
+            </if>
+            <if test="roleKey != null and roleKey != ''">
+                and role_key = #{roleKey}
+            </if>
+            <if test="createdBy != null and createdBy != ''">
+                and created_by = #{createdBy}
+            </if>
+            <if test="createdTime != null">
+                and created_time = #{createdTime}
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                and update_by = #{updateBy}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="isDeleted != null">
+                and is_deleted = #{isDeleted}
+            </if>
+        </where>
+    </select>
+
+    <!--通过主键修改数据-->
     <update id="update">
         update auth_role
         <set>

@@ -1,16 +1,16 @@
 package com.itheima.auth.infra.basic.service;
 
-import com.itheima.auth.infra.basic.entity.AuthRole;
+import com.itheima.auth.infra.basic.entity.AuthPermission;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 /**
- * (AuthRole)表服务接口
+ * (AuthPermission)表服务接口
  *
  * @author makejava
- * @since 2025-06-10 12:19:30
+ * @since 2025-06-10 18:25:48
  */
-public interface AuthRoleService {
+public interface AuthPermissionService {
 
     /**
      * 通过ID查询单条数据
@@ -18,23 +18,23 @@ public interface AuthRoleService {
      * @param id 主键
      * @return 实例对象
      */
-    AuthRole queryById(Long id);
+    AuthPermission queryById(Long id);
 
     /**
      * 新增数据
      *
-     * @param authRole 实例对象
+     * @param authPermission 实例对象
      * @return 实例对象
      */
-    Integer insert(AuthRole authRole);
+    Integer insert(AuthPermission authPermission);
 
     /**
      * 修改数据
      *
-     * @param authRole 实例对象
+     * @param authPermission 实例对象
      * @return 实例对象
      */
-    Integer update(AuthRole authRole);
+    Integer update(AuthPermission authPermission);
 
     /**
      * 通过主键删除数据
@@ -44,11 +44,4 @@ public interface AuthRoleService {
      */
     boolean deleteById(Long id);
 
-
-    /**
-     * 条件查询
-     * @param authRole
-     * @return
-     */
-    AuthRole queryByCondition(AuthRole authRole);
 }

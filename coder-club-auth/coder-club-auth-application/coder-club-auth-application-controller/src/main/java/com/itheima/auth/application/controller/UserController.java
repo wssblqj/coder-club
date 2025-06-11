@@ -11,7 +11,6 @@ import com.itheima.auth.common.entity.Result;
 import com.itheima.auth.domain.entity.AuthUserBO;
 import com.itheima.auth.domain.service.AuthUserDomainService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,7 +37,7 @@ public class UserController {
     public Result<Boolean> add(@RequestBody AuthUserDTO authUserDTO) {
         try {
             if (log.isInfoEnabled()) {
-                log.info("AuthUserController.add.dto: {}", JSON.toJSONString(authUserDTO));
+                log.info("UserController.add.dto: {}", JSON.toJSONString(authUserDTO));
             }
             checkUserInfo(authUserDTO);
             AuthUserBO authUserBO = AuthUserDTOConverter.INSTANCE.convertDTOToBO(authUserDTO);
@@ -66,7 +65,7 @@ public class UserController {
     public Result<Boolean> update(@RequestBody AuthUserDTO authUserDTO) {
         try {
             if (log.isInfoEnabled()) {
-                log.info("AuthUserController.update.dto: {}", JSON.toJSONString(authUserDTO));
+                log.info("UserController.update.dto: {}", JSON.toJSONString(authUserDTO));
             }
             Preconditions.checkNotNull(authUserDTO.getId(), "用户ID不能为空");
             AuthUserBO authUserBO = AuthUserDTOConverter.INSTANCE.convertDTOToBO(authUserDTO);
@@ -81,7 +80,7 @@ public class UserController {
     public Result<Boolean> delete(@RequestBody AuthUserDTO authUserDTO) {
         try {
             if (log.isInfoEnabled()) {
-                log.info("AuthUserController.delete.dto: {}", JSON.toJSONString(authUserDTO));
+                log.info("UserController.delete.dto: {}", JSON.toJSONString(authUserDTO));
             }
             Preconditions.checkNotNull(authUserDTO.getId(), "用户ID不能为空");
             AuthUserBO authUserBO = AuthUserDTOConverter.INSTANCE.convertDTOToBO(authUserDTO);
@@ -96,7 +95,7 @@ public class UserController {
     public Result<Boolean> changeStatus(@RequestBody AuthUserDTO authUserDTO) {
         try {
             if (log.isInfoEnabled()) {
-                log.info("AuthUserController.changeStatus.dto: {}", JSON.toJSONString(authUserDTO));
+                log.info("UserController.changeStatus.dto: {}", JSON.toJSONString(authUserDTO));
             }
             Preconditions.checkNotNull(authUserDTO.getId(), "用户ID不能为空");
             Preconditions.checkNotNull(authUserDTO.getStatus(), "用户状态不能为空");
