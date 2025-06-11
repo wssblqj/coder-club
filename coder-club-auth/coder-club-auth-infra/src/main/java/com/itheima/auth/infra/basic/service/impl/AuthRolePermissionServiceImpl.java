@@ -6,6 +6,7 @@ import com.itheima.auth.infra.basic.service.AuthRolePermissionService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * (AuthRolePermission)表服务实现类
@@ -61,5 +62,17 @@ public class AuthRolePermissionServiceImpl implements AuthRolePermissionService 
     @Override
     public boolean deleteById(Long id) {
         return this.authRolePermissionDao.deleteById(id) > 0;
+    }
+
+
+    /**
+     * 批量新增数据（MyBatis原生foreach方法）
+     *
+     * @param List<AuthRolePermission> 实例对象列表
+     * @return 影响行数
+     */
+    @Override
+    public int insertBatch(List<AuthRolePermission> authRolePermissionList) {
+        return this.authRolePermissionDao.insertBatch(authRolePermissionList);
     }
 }

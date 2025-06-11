@@ -8,6 +8,8 @@ import com.itheima.auth.infra.basic.service.AuthRolePermissionService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.LinkedList;
+import java.util.List;
 
 @Service
 public class AuthRolePermissionDomainServiceImpl implements AuthRolePermissionDomainService {
@@ -17,13 +19,15 @@ public class AuthRolePermissionDomainServiceImpl implements AuthRolePermissionDo
     @Override
     public Boolean add(AuthRolePermissionBO authRolePermissionBO) {
         Long roleId = authRolePermissionBO.getRoleId();
+        List<AuthRolePermission> authRolePermissionList = new LinkedList<>();
         authRolePermissionBO.getPermissionIdList().forEach(permissionId -> {
             AuthRolePermission authRolePermission = new AuthRolePermission();
             authRolePermission.setRoleId(roleId);
             authRolePermission.setPermissionId(permissionId);
             authRolePermission.setIsDeleted(IsDeleteFlagEnum.UN_DELETED.getCode());
-            authRolePermissionService.insert(authRolePermission);
+            authRolePermissionList.add(authRolePermission);
         });
-        return true;
+        int count = authRolePermissionService.insertBatch(authRolePermissionList);
+        return count > 0;
     }
 }

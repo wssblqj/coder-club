@@ -2,6 +2,8 @@ package com.itheima.auth.infra.basic.service;
 
 import com.itheima.auth.infra.basic.entity.AuthRolePermission;
 
+import java.util.List;
+
 /**
  * (AuthRolePermission)表服务接口
  *
@@ -43,4 +45,11 @@ public interface AuthRolePermissionService {
      */
     boolean deleteById(Long id);
 
+    /**
+     * 批量插入
+     *
+     * @param authRolePermissionList 实体列表
+     * @return 影响行数
+     */
+    int insertBatch(List<AuthRolePermission> authRolePermissionList);
 }
