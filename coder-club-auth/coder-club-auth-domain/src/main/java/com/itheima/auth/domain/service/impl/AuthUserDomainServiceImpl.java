@@ -1,23 +1,26 @@
 package com.itheima.auth.domain.service.impl;
 
 import cn.dev33.satoken.secure.SaSecureUtil;
+import com.google.gson.Gson;
 import com.itheima.auth.common.enums.AuthUserStatusEnum;
 import com.itheima.auth.common.enums.IsDeleteFlagEnum;
 import com.itheima.auth.domain.contants.AuthConstant;
 import com.itheima.auth.domain.convert.AuthUserBOConverter;
 import com.itheima.auth.domain.entity.AuthUserBO;
+import com.itheima.auth.domain.redis.RedisUtil;
 import com.itheima.auth.domain.service.AuthUserDomainService;
-import com.itheima.auth.infra.basic.entity.AuthRole;
-import com.itheima.auth.infra.basic.entity.AuthUser;
-import com.itheima.auth.infra.basic.entity.AuthUserRole;
-import com.itheima.auth.infra.basic.service.AuthRoleService;
-import com.itheima.auth.infra.basic.service.AuthUserRoleService;
-import com.itheima.auth.infra.basic.service.AuthUserService;
+import com.itheima.auth.infra.basic.entity.*;
+import com.itheima.auth.infra.basic.service.*;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class AuthUserDomainServiceImpl implements AuthUserDomainService {
 
@@ -30,7 +33,20 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
     @Resource
     private AuthRoleService authRoleService;
 
+    @Resource
+    private AuthRolePermissionService authRolePermissionService;
+
+    @Resource
+    private AuthPermissionService authPermissionService;
+
     private final String salt = "12315";
+
+    private String authPermisssionPrefix = "auth.permission";
+
+    private String authRolePrefix = "auth.role";
+
+    @Autowired
+    private RedisUtil redisUtil;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -51,6 +67,18 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
         authUserRole.setRoleId(roleId);
         authUserRole.setIsDeleted(IsDeleteFlagEnum.UN_DELETED.getCode());
         authUserRoleService.insert(authUserRole);
+        String roleKey = redisUtil.buildKey(authRolePrefix, authUser.getUserName());
+        List<AuthRole> roleList = new LinkedList<>();
+        roleList.add(authRole);
+        redisUtil.set(roleKey, new Gson().toJson(roleList));
+        AuthRolePermission authRolePermission = new AuthRolePermission();
+        authRolePermission.setRoleId(roleId);
+        List<AuthRolePermission> authRolePermissionList = authRolePermissionService
+                .queryByCondition(authRolePermission);
+        List<Long> permissionList = authRolePermissionList.stream().map(AuthRolePermission::getPermissionId).collect(Collectors.toList());
+        List<AuthPermission> authPermissionList = authPermissionService.queryByList(permissionList);
+        String permissionKey = redisUtil.buildKey(authPermisssionPrefix, authUser.getUserName());
+        redisUtil.set(permissionKey, new Gson().toJson(authPermissionList));
         return count > 0;
     }
 

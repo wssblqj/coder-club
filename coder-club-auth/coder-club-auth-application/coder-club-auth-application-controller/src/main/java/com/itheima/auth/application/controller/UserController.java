@@ -117,11 +117,11 @@ public class UserController {
      * @param password
      * @return
      */
-    @RequestMapping("doLogin")
+    @RequestMapping("/doLogin")
     public SaResult doLogin(String username, String password) {
         // 此处仅作模拟示例，真实项目需要从数据库中查询数据进行比对 
         if("zhang".equals(username) && "123456".equals(password)) {
-            StpUtil.login(10001);
+            StpUtil.login("毛泽东");
             SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
             return SaResult.data(tokenInfo);
         }
@@ -129,7 +129,7 @@ public class UserController {
     }
 
     // 查询登录状态，浏览器访问： http://localhost:8081/user/isLogin
-    @RequestMapping("isLogin")
+    @RequestMapping("/isLogin")
     public String isLogin() {
         return "当前会话是否登录：" + StpUtil.isLogin();
     }

@@ -6,6 +6,7 @@ import com.itheima.auth.infra.basic.service.AuthRolePermissionService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -74,5 +75,10 @@ public class AuthRolePermissionServiceImpl implements AuthRolePermissionService 
     @Override
     public int insertBatch(List<AuthRolePermission> authRolePermissionList) {
         return this.authRolePermissionDao.insertBatch(authRolePermissionList);
+    }
+
+    @Override
+    public List<AuthRolePermission> queryByCondition(AuthRolePermission authRolePermission) {
+        return this.authRolePermissionDao.queryAllByLimit(authRolePermission);
     }
 }

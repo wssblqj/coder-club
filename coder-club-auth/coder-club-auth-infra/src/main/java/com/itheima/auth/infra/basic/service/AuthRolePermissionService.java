@@ -52,4 +52,12 @@ public interface AuthRolePermissionService {
      * @return 影响行数
      */
     int insertBatch(List<AuthRolePermission> authRolePermissionList);
+
+    /**
+     * 条件查询
+     *
+     * @param authRolePermission 实体
+     * @return 列表
+     */
+    List<AuthRolePermission> queryByCondition(AuthRolePermission authRolePermission);
 }

@@ -25,10 +25,9 @@ public interface AuthRolePermissionDao {
      * 查询指定行数据
      *
      * @param authRolePermission 查询条件
-     * @param pageable         分页对象
      * @return 对象列表
      */
-    List<AuthRolePermission> queryAllByLimit(AuthRolePermission authRolePermission, @Param("pageable") Pageable pageable);
+    List<AuthRolePermission> queryAllByLimit(AuthRolePermission authRolePermission);
 
     /**
      * 统计总行数

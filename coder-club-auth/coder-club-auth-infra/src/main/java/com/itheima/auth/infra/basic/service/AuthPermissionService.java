@@ -4,6 +4,8 @@ import com.itheima.auth.infra.basic.entity.AuthPermission;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.List;
+
 /**
  * (AuthPermission)表服务接口
  *
@@ -44,4 +46,11 @@ public interface AuthPermissionService {
      */
     boolean deleteById(Long id);
 
+    /**
+     * 通过主键查询单条数据
+     *
+     * @param permissionList 主键
+     * @return 列表对象
+     */
+    List<AuthPermission> queryByList(List<Long> permissionList);
 }

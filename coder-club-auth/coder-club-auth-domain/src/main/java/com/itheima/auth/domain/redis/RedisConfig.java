@@ -1,4 +1,4 @@
-package com.itheima.gateway.redis;
+package com.itheima.auth.domain.redis;
 
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -16,6 +16,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 public class RedisConfig {
+
 
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
