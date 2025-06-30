@@ -52,4 +52,11 @@ public interface SubjectCategoryService {
      * @return
      */
     List<SubjectCategory> queryCategory(SubjectCategory subjectCategory);
+
+
+    /**
+     * 查询小雷数量
+     * @return
+     */
+    Integer querySubjectCount(Long id);
 }

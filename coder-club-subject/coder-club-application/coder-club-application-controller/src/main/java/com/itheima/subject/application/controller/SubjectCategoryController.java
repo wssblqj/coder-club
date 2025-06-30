@@ -4,7 +4,9 @@ package com.itheima.subject.application.controller;
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Preconditions;
 import com.itheima.subject.application.convert.SubjectCategoryDTOConverter;
+import com.itheima.subject.application.convert.SubjectLabelDTOConverter;
 import com.itheima.subject.application.dto.SubjectCategoryDTO;
+import com.itheima.subject.application.dto.SubjectLabelDTO;
 import com.itheima.subject.common.entity.Result;
 import com.itheima.subject.domain.entity.SubjectCategoryBO;
 import com.itheima.subject.domain.service.SubjectCategoryDomainService;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.security.auth.Subject;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -59,7 +62,7 @@ public class SubjectCategoryController {
             SubjectCategoryBO subjectCategoryBO = SubjectCategoryDTOConverter.INSTANCE.convertDtoToBo(subjectCategoryDTO);
             List<SubjectCategoryBO> subjectCategoryBOList = subjectCategoryDomainService.queryCategory(subjectCategoryBO);
             List<SubjectCategoryDTO> subjectCategoryDTOList = SubjectCategoryDTOConverter.INSTANCE
-                    .convertBoToDto(subjectCategoryBOList);
+                    .convertBoListToDtoList(subjectCategoryBOList);
             return Result.ok(subjectCategoryDTOList);
         }catch (Exception e) {
             log.error("SubjectCategoryController.queryPrimaryCategory.error: {}", e.getMessage());
@@ -79,7 +82,7 @@ public class SubjectCategoryController {
             SubjectCategoryBO subjectCategoryBO = SubjectCategoryDTOConverter.INSTANCE.convertDtoToBo(subjectCategoryDTO);
             List<SubjectCategoryBO> subjectCategoryBOList = subjectCategoryDomainService.queryCategory(subjectCategoryBO);
             List<SubjectCategoryDTO> subjectCategoryDTOList = SubjectCategoryDTOConverter.INSTANCE
-                    .convertBoToDto(subjectCategoryBOList);
+                    .convertBoListToDtoList(subjectCategoryBOList);
             return Result.ok(subjectCategoryDTOList);
         }catch (Exception e) {
             log.error("SubjectCategoryController.queryPrimaryCategory.error: {}", e.getMessage());
@@ -116,6 +119,32 @@ public class SubjectCategoryController {
         } catch (Exception e) {
             log.error("SubjectCategoryController.update.error: {}", e.getMessage());
             return Result.fail("更新分类失败");
+        }
+    }
+
+    /**
+     * 查询分类以及标签一次性
+     */
+    @PostMapping("/queryCategoryAndLabel")
+    public Result<List<SubjectCategoryDTO>> queryCategoryAndLabel(@RequestBody SubjectCategoryDTO subjectCategoryDTO) {
+        try {
+            if(log.isInfoEnabled()) {
+                log.info("SubjectCategoryController.queryCategoryAndLabel.dto: {}",
+                        JSON.toJSONString(subjectCategoryDTO));
+            }
+            Preconditions.checkNotNull(subjectCategoryDTO.getId(), "id不能为空");
+            SubjectCategoryBO subjectCategoryBO = SubjectCategoryDTOConverter.INSTANCE.convertDtoToBo(subjectCategoryDTO);
+            List<SubjectCategoryBO> subjectCategoryBOList = subjectCategoryDomainService.queryCategoryAndLabel(subjectCategoryBO);
+            List<SubjectCategoryDTO> subjectCategoryDTOList = new ArrayList<>();
+            subjectCategoryBOList.forEach(bo -> {
+                SubjectCategoryDTO dto = SubjectCategoryDTOConverter.INSTANCE.convertBoToDto(bo);
+                dto.setLabelDTOList(SubjectLabelDTOConverter.INSTANCE.convertBoListToDtoList(bo.getLabelBOList()));
+                subjectCategoryDTOList.add(dto);
+            });
+            return Result.ok(subjectCategoryDTOList);
+        }catch (Exception e) {
+            log.error("SubjectCategoryController.queryCategoryAndLabel.error: {}", e.getMessage());
+            return Result.fail("查询失败");
         }
     }
 }

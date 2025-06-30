@@ -77,5 +77,12 @@ public interface SubjectCategoryDao {
      * @return
      */
     List<SubjectCategory> queryCategory(SubjectCategory subjectCategory);
+
+    /**
+     * 查询大类下的题目数量
+     * @param id
+     * @return
+     */
+    Integer querySubjectCount(Long id);
 }
 

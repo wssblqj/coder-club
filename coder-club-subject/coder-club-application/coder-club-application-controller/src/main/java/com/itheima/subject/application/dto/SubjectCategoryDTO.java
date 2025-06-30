@@ -3,6 +3,7 @@ package com.itheima.subject.application.dto;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 public class SubjectCategoryDTO implements Serializable {
@@ -25,5 +26,13 @@ public class SubjectCategoryDTO implements Serializable {
      */
     private Long parentId;
 
+    /**
+     * 数量
+     */
     private Integer count;
+
+    /**
+     * 标签信息
+     */
+    private List<SubjectLabelDTO> labelDTOList;
 }

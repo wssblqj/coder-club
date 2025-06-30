@@ -11,7 +11,9 @@ import java.util.List;
 public interface SubjectCategoryConverter {
 
     SubjectCategoryConverter INSTANCE = Mappers.getMapper(SubjectCategoryConverter.class);
+
     SubjectCategory convertBoToCategory(SubjectCategoryBO subjectCategoryBO);
 
     List<SubjectCategoryBO> convertCategoryToBo(List<SubjectCategory> subjectCategoryList);
+
 }
