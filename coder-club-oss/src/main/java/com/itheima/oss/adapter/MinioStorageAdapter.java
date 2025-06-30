@@ -3,10 +3,12 @@ package com.itheima.oss.adapter;
 import com.itheima.oss.entity.FileInfo;
 import com.itheima.oss.util.MinioUtil;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
 
@@ -16,6 +18,13 @@ public class MinioStorageAdapter implements StorageAdapter {
 
     @Resource
     private MinioUtil minioUtil;
+
+    /**
+     * minioUrl
+     */
+    @Value("${minio.url}")
+    private String url;
+
 
     @Override
     @SneakyThrows
@@ -27,11 +36,11 @@ public class MinioStorageAdapter implements StorageAdapter {
     @SneakyThrows
     public void uploadFile(MultipartFile file, String bucketName, String objectName) {
         minioUtil.createBucket(bucketName);
-        if (objectName != null) {
-            minioUtil.uploadFile(file.getInputStream(), bucketName, objectName + "/" + file.getOriginalFilename());
-        } else {
-            minioUtil.uploadFile(file.getInputStream(), bucketName, file.getOriginalFilename());
-        }
+        // 将文件读入内存， 构造可复用流
+        byte[] bytes = file.getBytes();
+        ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+        String finalObjectName = (objectName != null) ? objectName + "/" + file.getOriginalFilename() : file.getOriginalFilename();
+        minioUtil.uploadFile(bais, bucketName, finalObjectName, bytes.length, file.getContentType());
     }
 
     @Override
@@ -62,5 +71,10 @@ public class MinioStorageAdapter implements StorageAdapter {
     @SneakyThrows
     public void deleteBucket(String bucketName) {
         minioUtil.deleteBucket(bucketName);
+    }
+
+    @Override
+    public String getUrl(String bucket, String objectName) {
+        return url + "/" + bucket + "/" + objectName;
     }
 }

@@ -8,6 +8,7 @@
         <option value="$PROJECT_DIR$/coder-club-oss/pom.xml" />
         <option value="$PROJECT_DIR$/coder-club-auth/pom.xml" />
         <option value="$PROJECT_DIR$/coder-club-gateway/pom.xml" />
+        <option value="$PROJECT_DIR$/coder-club-wx/pom.xml" />
       </list>
     </option>
   </component>

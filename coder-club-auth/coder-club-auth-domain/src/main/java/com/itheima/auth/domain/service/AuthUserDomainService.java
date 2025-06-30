@@ -1,5 +1,6 @@
 package com.itheima.auth.domain.service;
 
+import cn.dev33.satoken.stp.SaTokenInfo;
 import com.itheima.auth.domain.entity.AuthUserBO;
 
 public interface AuthUserDomainService {
@@ -28,4 +29,17 @@ public interface AuthUserDomainService {
     Boolean delete(AuthUserBO authUserBO);
 
 
+    /**
+     * 登录
+     * @param validateCode
+     * @return
+     */
+    SaTokenInfo doLogin(String validateCode);
+
+    /**
+     * 获取用户信息
+     * @param authUserBO
+     * @return
+     */
+    AuthUserBO getUserInfo(AuthUserBO authUserBO);
 }

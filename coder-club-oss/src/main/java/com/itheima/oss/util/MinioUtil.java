@@ -34,9 +34,13 @@ public class MinioUtil {
     /**
      * 上传文件
      */
-    public void uploadFile(InputStream inputStream, String bucketName, String objectName) throws Exception {
-        minioClient.putObject(PutObjectArgs.builder().bucket(bucketName)
-                .object(objectName).stream(inputStream, -1, Integer.MAX_VALUE).build());
+    public void uploadFile(InputStream inputStream, String bucketName, String objectName, int size, String contentType) throws Exception {
+        minioClient.putObject(PutObjectArgs.builder()
+                .bucket(bucketName)
+                .object(objectName)
+                .stream(inputStream, size, -1)
+                .contentType(contentType)
+                .build());
     }
 
     /**

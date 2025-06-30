@@ -26,8 +26,11 @@ public class FileService {
     /**
      * 上传文件
      */
-    public void uploadFile(MultipartFile file, String bucketName, String objectName) {
-        storageAdapter.uploadFile(file, bucketName, objectName);
+    public String uploadFile(MultipartFile file, String bucketName, String objectName) {
+        storageAdapter.uploadFile(file,bucketName,objectName);
+        objectName = (objectName != null) ? objectName + "/" + file.getOriginalFilename() : file.getOriginalFilename();
+        return storageAdapter.getUrl(bucketName, objectName);
+
     }
 
     /**
@@ -64,5 +67,12 @@ public class FileService {
      */
     public void deleteBucket(String bucketName) {
         storageAdapter.deleteBucket(bucketName);
+    }
+
+    /**
+     * 获取文件url
+     */
+    public String getUrl(String bucket, String objectName) {
+        return storageAdapter.getUrl(bucket, objectName);
     }
 }

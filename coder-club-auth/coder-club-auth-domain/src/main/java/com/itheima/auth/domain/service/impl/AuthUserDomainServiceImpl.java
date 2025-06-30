@@ -1,6 +1,9 @@
 package com.itheima.auth.domain.service.impl;
 
 import cn.dev33.satoken.secure.SaSecureUtil;
+import cn.dev33.satoken.stp.SaTokenInfo;
+import cn.dev33.satoken.stp.StpUtil;
+import com.alibaba.cloud.commons.lang.StringUtils;
 import com.google.gson.Gson;
 import com.itheima.auth.common.enums.AuthUserStatusEnum;
 import com.itheima.auth.common.enums.IsDeleteFlagEnum;
@@ -15,6 +18,7 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.LinkedList;
@@ -45,6 +49,8 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
 
     private String authRolePrefix = "auth.role";
 
+    private static final String Login_PREFIX = "loginCode";
+
     @Autowired
     private RedisUtil redisUtil;
 
@@ -52,8 +58,17 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
     @Transactional(rollbackFor = Exception.class)
     @SneakyThrows
     public Boolean register(AuthUserBO authUserBO) {
+        AuthUser existAuthUser = new AuthUser();
+        existAuthUser.setUserName(authUserBO.getUserName());
+        //检验用户是否存在
+        List<AuthUser> existList = authUserService.queryByCondition(existAuthUser);
+        if(existList.size() > 0) {
+            return false;
+        }
         AuthUser authUser = AuthUserBOConverter.INSTANCE.convertBOToEntity(authUserBO);
-        authUser.setPassword(SaSecureUtil.md5BySalt(authUser.getPassword(), salt));
+        if(!StringUtils.isBlank(authUser.getPassword())) {
+            authUser.setPassword(SaSecureUtil.md5BySalt(authUser.getPassword(), salt));
+        }
         authUser.setStatus(AuthUserStatusEnum.OPEN.getCode());
         authUser.setIsDeleted(IsDeleteFlagEnum.UN_DELETED.getCode());
         Integer count = authUserService.insert(authUser);
@@ -96,6 +111,32 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
         authUser.setIsDeleted(IsDeleteFlagEnum.DELETED.getCode());
         Integer count = authUserService.update(authUser);
         return count > 0;
+    }
+
+    @Override
+    public SaTokenInfo doLogin(String validateCode) {
+        String loginKey = redisUtil.buildKey(Login_PREFIX, validateCode);
+        String openId = redisUtil.get(loginKey);
+        if(StringUtils.isBlank(openId)) {
+            return null;
+        }
+        AuthUserBO authUserBO = new AuthUserBO();
+        authUserBO.setUserName(openId);
+        this.register(authUserBO);
+        StpUtil.login(openId);
+        return StpUtil.getTokenInfo();
+    }
+
+    @Override
+    public AuthUserBO getUserInfo(AuthUserBO authUserBO) {
+        AuthUser authUser = AuthUserBOConverter.INSTANCE.convertBOToEntity(authUserBO);
+        authUser.setUserName(authUserBO.getUserName());
+        List<AuthUser> authUsers = authUserService.queryByCondition(authUser);
+        if(CollectionUtils.isEmpty(authUsers)) {
+            return new AuthUserBO();
+        }
+        AuthUser user = authUsers.get(0);
+        return AuthUserBOConverter.INSTANCE.convertEntityToBO(user);
     }
 
 

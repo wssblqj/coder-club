@@ -8,13 +8,13 @@ import com.google.common.base.Preconditions;
 import com.itheima.auth.application.convert.AuthUserDTOConverter;
 import com.itheima.auth.application.dto.AuthUserDTO;
 import com.itheima.auth.common.entity.Result;
+import com.itheima.auth.domain.convert.AuthUserBOConverter;
 import com.itheima.auth.domain.entity.AuthUserBO;
 import com.itheima.auth.domain.service.AuthUserDomainService;
+import com.itheima.auth.infra.basic.entity.AuthUser;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -108,30 +108,52 @@ public class UserController {
     }
 
 
-
-
     /**
      * 登录
-     *
-     * @param username
-     * @param password
+     * @param validCode
      * @return
      */
     @RequestMapping("/doLogin")
-    public SaResult doLogin(String username, String password) {
-        // 此处仅作模拟示例，真实项目需要从数据库中查询数据进行比对 
-        if("zhang".equals(username) && "123456".equals(password)) {
-            StpUtil.login("毛泽东");
-            SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
-            return SaResult.data(tokenInfo);
+    public Result<SaTokenInfo> doLogin(@RequestParam("validCode") String validCode) {
+        try {
+            Preconditions.checkArgument(!StringUtils.isBlank(validCode), "验证码不能为空");
+            SaTokenInfo tokenInfo = authUserDomainService.doLogin(validCode);
+            return Result.ok(tokenInfo);
+        } catch (Exception e) {
+            log.error("UserController.doLogin.error: {}", e.getMessage());
+            return Result.fail("用户登陆失败");
         }
-        return SaResult.error("登录失败");
     }
 
     // 查询登录状态，浏览器访问： http://localhost:8081/user/isLogin
     @RequestMapping("/isLogin")
     public String isLogin() {
         return "当前会话是否登录：" + StpUtil.isLogin();
+    }
+
+    @RequestMapping("/getUserInfo")
+    public Result<AuthUserDTO> getUserInfo(@RequestBody AuthUserDTO authUserDTO) {
+        try {
+            Preconditions.checkNotNull(authUserDTO.getUserName(), "用户名称不能为空");
+            AuthUserBO authUserBO = AuthUserDTOConverter.INSTANCE.convertDTOToBO(authUserDTO);
+            AuthUserBO userInfo = authUserDomainService.getUserInfo(authUserBO);
+            return Result.ok(AuthUserDTOConverter.INSTANCE.convertBOToDTO(userInfo));
+        } catch (Exception e) {
+            log.error("UserController.getUserInfo.error: {}", e.getMessage());
+            return Result.fail("查询用户信息失败");
+        }
+    }
+
+    @RequestMapping("/logOut")
+    public Result<AuthUserDTO> logOut(@RequestBody String userName) {
+        try {
+            Preconditions.checkArgument(!StringUtils.isBlank(userName), "用户名称不能为空");
+            StpUtil.logout(userName);
+            return Result.ok("用户登出成功");
+        } catch (Exception e) {
+            log.error("UserController.logOut.error: {}", e.getMessage());
+            return Result.fail("用户登出失败");
+        }
     }
     
 }

@@ -14,6 +14,7 @@
         <module name="coder-club-application-job" />
         <module name="coder-club-auth-infra" />
         <module name="coder-club-auth-application-mq" />
+        <module name="coder-club-wx" />
         <module name="coder-club-auth-common" />
         <module name="coder-club-subject-api" />
         <module name="coder-club-auth-api" />

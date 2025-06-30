@@ -1,7 +1,8 @@
 package com.itheima.auth.infra.basic.service;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.itheima.auth.infra.basic.entity.AuthUser;
+
+import java.util.List;
 
 /**
  * (AuthUser)表服务接口
@@ -42,5 +43,13 @@ public interface AuthUserService {
      * @return 是否成功
      */
     boolean deleteById(Long id);
+
+    /**
+     * 条件查询
+     *
+     * @param authUser 实例对象
+     * @return 对象列表
+     */
+    List<AuthUser> queryByCondition(AuthUser authUser);
 
 }
