@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 自定义权限验证接口扩展 
+ * 自定义权限验证接口扩展
  */
 @Component
 public class StpInterfaceImpl implements StpInterface {
@@ -42,16 +42,16 @@ public class StpInterfaceImpl implements StpInterface {
     private List<String> getAuth(Object loginId, String prefix) {
         String authKey = redisUtil.buildKey(prefix, loginId.toString());
         String authValue = redisUtil.get(authKey);
-        if(StringUtils.isBlank(authValue)) {
+        if (StringUtils.isBlank(authValue)) {
             return Collections.emptyList();
         }
         List<String> authList = new LinkedList<>();
-        if(authRolePrefix.equals(prefix)) {
+        if (authRolePrefix.equals(prefix)) {
             //Gson
             List<AuthRole> roleList = new Gson().fromJson(authValue, new TypeToken<List<AuthRole>>() {
             }.getType());
             authList = roleList.stream().map(AuthRole::getRoleKey).collect(Collectors.toList());
-        } else if(authPermisssionPrefix.equals(prefix)) {
+        } else if (authPermisssionPrefix.equals(prefix)) {
             List<AuthPermission> permissionList = new Gson().fromJson(authValue, new TypeToken<List<AuthPermission>>() {
             }.getType());
             authList = permissionList.stream().map(AuthPermission::getPermissionKey).collect(Collectors.toList());

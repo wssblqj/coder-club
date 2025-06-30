@@ -2,6 +2,8 @@ package com.itheima.auth.domain.service;
 
 import com.itheima.auth.domain.entity.AuthPermissionBO;
 
+import java.util.List;
+
 public interface AuthPermissionDomainService {
 
     /**
@@ -27,4 +29,12 @@ public interface AuthPermissionDomainService {
      * @return
      */
     Boolean delete(AuthPermissionBO authPermissionBO);
+
+    /**
+     * 查询权限
+     *
+     * @param userName
+     * @return
+     */
+    List<String> getPermission(String userName);
 }

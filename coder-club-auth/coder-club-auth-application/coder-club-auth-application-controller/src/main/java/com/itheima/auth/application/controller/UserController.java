@@ -110,6 +110,7 @@ public class UserController {
 
     /**
      * 登录
+     *
      * @param validCode
      * @return
      */
@@ -155,5 +156,5 @@ public class UserController {
             return Result.fail("用户登出失败");
         }
     }
-    
+
 }
