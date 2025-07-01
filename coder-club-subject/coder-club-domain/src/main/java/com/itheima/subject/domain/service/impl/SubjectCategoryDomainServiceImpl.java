@@ -122,6 +122,9 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
     }
 
     private Map<Long, List<SubjectLabelBO>> getSubjectLabelBOList(SubjectCategoryBO bo) {
+        if (log.isInfoEnabled()) {
+            log.info("getSubjectLabelBOList.bo: {}", JSON.toJSONString(bo));
+        }
         Map<Long, List<SubjectLabelBO>> labelMap = new HashMap<>();
         SubjectMapping subjectMapping = new SubjectMapping();
         subjectMapping.setCategoryId(bo.getId());
