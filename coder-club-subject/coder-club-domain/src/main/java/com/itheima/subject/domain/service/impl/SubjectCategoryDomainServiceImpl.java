@@ -19,6 +19,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -99,25 +100,23 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
         }
         List<FutureTask<Map<Long, List<SubjectLabelBO>>>> futureTaskList = new ArrayList<>();
         List<SubjectCategoryBO> subjectCategoryBOList = SubjectCategoryConverter.INSTANCE.convertCategoryToBo(subjectCategories);
-        subjectCategoryBOList.forEach( bo -> {
-            FutureTask<Map<Long, List<SubjectLabelBO>>> futureTask = new FutureTask<>(
-                    () -> getSubjectLabelBOList(bo)
-            );
-            futureTaskList.add(futureTask);
-            labelThreadPool.submit(futureTask);
-        });
         Map<Long, List<SubjectLabelBO>> map = new HashMap<>();
-        for(FutureTask<Map<Long, List<SubjectLabelBO>>> futureTask : futureTaskList) {
+        List<CompletableFuture<Map<Long, List<SubjectLabelBO>>>> completableFutureList = subjectCategoryBOList
+                .stream().map(bo -> CompletableFuture.supplyAsync(() ->
+                        getSubjectLabelBOList(bo),
+                        labelThreadPool
+                    )).collect(Collectors.toList());
+        completableFutureList.forEach(completableFuture -> {
             try {
-                Map<Long, List<SubjectLabelBO>> resultMap = futureTask.get();
+                Map<Long, List<SubjectLabelBO>> resultMap = completableFuture.get();
                 if (CollectionUtils.isEmpty(resultMap)) {
-                    continue;
+                    return;
                 }
                 map.putAll(resultMap);
-            } catch (Exception e) {
+            } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
-        }
+        });
         subjectCategoryBOList.forEach(bo -> bo.setLabelBOList(map.get(bo.getId())));
         return subjectCategoryBOList;
     }
