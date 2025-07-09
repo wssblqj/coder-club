@@ -25,13 +25,15 @@ public class GatewayExceptionHandler implements ErrorWebExceptionHandler {
         ServerHttpRequest request = serverWebExchange.getRequest();
         ServerHttpResponse response = serverWebExchange.getResponse();
         Integer code = 200;
-        String message = "服务器异常";
+        String message = "";
         if (throwable instanceof SaTokenException) {
             code = 401;
             message = "用户无权限";
+            throwable.printStackTrace();
         } else {
             code = 500;
             message = "服务器异常";
+            throwable.printStackTrace();
         }
         Result result = Result.fail(code, message);
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);

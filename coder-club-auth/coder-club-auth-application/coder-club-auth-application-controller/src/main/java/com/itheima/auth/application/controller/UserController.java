@@ -5,6 +5,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Preconditions;
+import com.google.gson.Gson;
 import com.itheima.auth.application.convert.AuthUserDTOConverter;
 import com.itheima.auth.application.dto.AuthUserDTO;
 import com.itheima.auth.common.entity.Result;
@@ -25,7 +26,6 @@ public class UserController {
 
     @Resource
     private AuthUserDomainService authUserDomainService;
-
 
     /**
      * 注册
@@ -129,6 +129,8 @@ public class UserController {
     // 查询登录状态，浏览器访问： http://localhost:8081/user/isLogin
     @RequestMapping("/isLogin")
     public String isLogin() {
+        System.out.println("当前 Token：" + StpUtil.getTokenValue());
+        System.out.println("当前是否登录：" + StpUtil.isLogin());
         return "当前会话是否登录：" + StpUtil.isLogin();
     }
 

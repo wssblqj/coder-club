@@ -7,6 +7,7 @@ import com.itheima.subject.application.convert.SubjectCategoryDTOConverter;
 import com.itheima.subject.application.convert.SubjectLabelDTOConverter;
 import com.itheima.subject.application.dto.SubjectCategoryDTO;
 import com.itheima.subject.application.dto.SubjectLabelDTO;
+import com.itheima.subject.application.util.LoginUtil;
 import com.itheima.subject.common.entity.Result;
 import com.itheima.subject.domain.entity.SubjectCategoryBO;
 import com.itheima.subject.domain.service.SubjectCategoryDomainService;
@@ -132,6 +133,7 @@ public class SubjectCategoryController {
                 log.info("SubjectCategoryController.queryCategoryAndLabel.dto: {}",
                         JSON.toJSONString(subjectCategoryDTO));
             }
+            String loginId = LoginUtil.getLoginId();
             Preconditions.checkNotNull(subjectCategoryDTO.getId(), "id不能为空");
             SubjectCategoryBO subjectCategoryBO = SubjectCategoryDTOConverter.INSTANCE.convertDtoToBo(subjectCategoryDTO);
             List<SubjectCategoryBO> subjectCategoryBOList = subjectCategoryDomainService.queryCategoryAndLabel(subjectCategoryBO);
