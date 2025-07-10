@@ -2,17 +2,14 @@ package com.itheima.auth.application.controller;
 
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
-import cn.dev33.satoken.util.SaResult;
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Preconditions;
-import com.google.gson.Gson;
 import com.itheima.auth.application.convert.AuthUserDTOConverter;
-import com.itheima.auth.application.dto.AuthUserDTO;
-import com.itheima.auth.common.entity.Result;
-import com.itheima.auth.domain.convert.AuthUserBOConverter;
+
+import com.itheima.auth.entity.Result;
 import com.itheima.auth.domain.entity.AuthUserBO;
 import com.itheima.auth.domain.service.AuthUserDomainService;
-import com.itheima.auth.infra.basic.entity.AuthUser;
+import com.itheima.auth.entity.AuthUserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;

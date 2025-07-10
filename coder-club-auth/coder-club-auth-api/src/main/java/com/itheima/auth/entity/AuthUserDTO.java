@@ -1,4 +1,4 @@
-package com.itheima.auth.application.dto;
+package com.itheima.auth.entity;
 
 import lombok.Data;
 

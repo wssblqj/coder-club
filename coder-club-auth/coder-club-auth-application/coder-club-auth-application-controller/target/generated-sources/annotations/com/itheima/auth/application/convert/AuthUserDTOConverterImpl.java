@@ -1,12 +1,12 @@
 package com.itheima.auth.application.convert;
 
-import com.itheima.auth.application.dto.AuthUserDTO;
 import com.itheima.auth.domain.entity.AuthUserBO;
+import com.itheima.auth.entity.AuthUserDTO;
 import javax.annotation.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-06-17T20:33:58+0800",
+    date = "2025-07-09T10:43:40+0800",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 1.8.0_261 (Oracle Corporation)"
 )
 public class AuthUserDTOConverterImpl implements AuthUserDTOConverter {

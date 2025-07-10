@@ -1,7 +1,6 @@
-package com.itheima.auth.common.entity;
+package com.itheima.auth.entity;
 
 
-import com.itheima.auth.common.enums.ResultCode;
 import lombok.Data;
 
 @Data

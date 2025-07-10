@@ -1,10 +1,9 @@
 package com.itheima.auth.application.convert;
-import com.itheima.auth.application.dto.AuthUserDTO;
+
 import com.itheima.auth.domain.entity.AuthUserBO;
+import com.itheima.auth.entity.AuthUserDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-
-import java.util.List;
 
 /**
  * 标签DTO转换

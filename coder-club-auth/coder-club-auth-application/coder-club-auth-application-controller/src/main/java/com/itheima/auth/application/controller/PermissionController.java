@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.google.common.base.Preconditions;
 import com.itheima.auth.application.convert.AuthPermissionDTOConverter;
 import com.itheima.auth.application.dto.AuthPermissionDTO;
-import com.itheima.auth.common.entity.Result;
+import com.itheima.auth.entity.Result;
 import com.itheima.auth.domain.entity.AuthPermissionBO;
 import com.itheima.auth.domain.service.AuthPermissionDomainService;
 import lombok.extern.slf4j.Slf4j;

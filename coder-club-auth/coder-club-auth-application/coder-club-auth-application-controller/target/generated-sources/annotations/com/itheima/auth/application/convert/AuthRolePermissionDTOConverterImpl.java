@@ -2,13 +2,11 @@ package com.itheima.auth.application.convert;
 
 import com.itheima.auth.application.dto.AuthRolePermissionDTO;
 import com.itheima.auth.domain.entity.AuthRolePermissionBO;
-import java.util.ArrayList;
-import java.util.List;
 import javax.annotation.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-06-11T19:28:14+0800",
+    date = "2025-07-09T10:43:40+0800",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 1.8.0_261 (Oracle Corporation)"
 )
 public class AuthRolePermissionDTOConverterImpl implements AuthRolePermissionDTOConverter {
@@ -20,14 +18,6 @@ public class AuthRolePermissionDTOConverterImpl implements AuthRolePermissionDTO
         }
 
         AuthRolePermissionBO authRolePermissionBO = new AuthRolePermissionBO();
-
-        authRolePermissionBO.setId( authRolePermissionDTO.getId() );
-        authRolePermissionBO.setRoleId( authRolePermissionDTO.getRoleId() );
-        authRolePermissionBO.setPermissionId( authRolePermissionDTO.getPermissionId() );
-        List<Long> list = authRolePermissionDTO.getPermissionIdList();
-        if ( list != null ) {
-            authRolePermissionBO.setPermissionIdList( new ArrayList<Long>( list ) );
-        }
 
         return authRolePermissionBO;
     }

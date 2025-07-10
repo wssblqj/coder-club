@@ -6,6 +6,7 @@ import com.itheima.subject.domain.convert.SubjectCategoryConverter;
 import com.itheima.subject.domain.entity.SubjectCategoryBO;
 import com.itheima.subject.domain.entity.SubjectLabelBO;
 import com.itheima.subject.domain.service.SubjectCategoryDomainService;
+import com.itheima.subject.domain.util.CacheUtil;
 import com.itheima.subject.infra.basic.entity.SubjectCategory;
 import com.itheima.subject.infra.basic.entity.SubjectLabel;
 import com.itheima.subject.infra.basic.entity.SubjectMapping;
@@ -13,16 +14,14 @@ import com.itheima.subject.infra.basic.service.SubjectCategoryService;
 import com.itheima.subject.infra.basic.service.SubjectLabelService;
 import com.itheima.subject.infra.basic.service.SubjectMappingService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,6 +40,8 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
     @Autowired
     private ThreadPoolExecutor labelThreadPool;
 
+    @Resource
+    private CacheUtil cacheUtil;
 
     @Override
     public void insert(SubjectCategoryBO subjectCategoryBO) {
@@ -90,9 +91,17 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
 
     @Override
     public List<SubjectCategoryBO> queryCategoryAndLabel(SubjectCategoryBO subjectCategoryBO) {
+        String cacheKey = "categoryAndLabel." + subjectCategoryBO.getId();
+        List<SubjectCategoryBO> subjectCategoryBOList = cacheUtil.getResult(cacheKey, SubjectCategoryBO.class, (key) ->
+                getSubjectCategoryBOList(subjectCategoryBO.getId())
+        );
+        return subjectCategoryBOList;
+    }
+
+    private List<SubjectCategoryBO> getSubjectCategoryBOList(Long categoryId) {
         SubjectCategory subjectCategory = new SubjectCategory();
         subjectCategory.setIsDeleted(IsDeleteFlagEnum.UN_DELETED.getCode());
-        subjectCategory.setParentId(subjectCategoryBO.getId());
+        subjectCategory.setParentId(categoryId);
         List<SubjectCategory> subjectCategories = subjectCategoryService.queryCategory(subjectCategory);
         if(log.isInfoEnabled()) {
             log.info("SubjectCategoryDomainServiceImpl.queryCategoryAndLabel.subjectCategories: {}"

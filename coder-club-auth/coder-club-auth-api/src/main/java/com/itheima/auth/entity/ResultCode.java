@@ -1,6 +1,5 @@
-package com.itheima.auth.common.enums;
+package com.itheima.auth.entity;
 
-import lombok.Data;
 import lombok.Getter;
 
 @Getter
