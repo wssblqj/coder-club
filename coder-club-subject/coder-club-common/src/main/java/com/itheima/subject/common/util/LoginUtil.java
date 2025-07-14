@@ -1,7 +1,6 @@
-package com.itheima.subject.application.util;
+package com.itheima.subject.common.util;
 
-
-import com.itheima.subject.application.context.LoginContextHolder;
+import com.itheima.subject.common.context.LoginContextHolder;
 
 /**
  * 登录工具类
