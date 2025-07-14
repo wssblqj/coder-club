@@ -3,31 +3,29 @@ package com.itheima.subject.domain.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.itheima.subject.common.entity.PageResult;
 import com.itheima.subject.common.enums.IsDeleteFlagEnum;
+import com.itheima.subject.common.util.IdWorkerUtil;
 import com.itheima.subject.domain.convert.SubjectInfoConverter;
-import com.itheima.subject.domain.convert.SubjectLabelConverter;
 import com.itheima.subject.domain.entity.SubjectInfoBO;
-import com.itheima.subject.domain.entity.SubjectLabelBO;
 import com.itheima.subject.domain.entity.SubjectOptionBO;
 import com.itheima.subject.domain.handler.subject.SubjectTypeHandler;
 import com.itheima.subject.domain.handler.subject.SubjectTypeHandlerFactory;
 import com.itheima.subject.domain.service.SubjectInfoDomainService;
-import com.itheima.subject.domain.service.SubjectLabelDomainService;
 import com.itheima.subject.infra.basic.entity.SubjectInfo;
+import com.itheima.subject.infra.basic.entity.SubjectInfoEs;
 import com.itheima.subject.infra.basic.entity.SubjectLabel;
 import com.itheima.subject.infra.basic.entity.SubjectMapping;
 import com.itheima.subject.infra.basic.service.SubjectInfoService;
 import com.itheima.subject.infra.basic.service.SubjectLabelService;
 import com.itheima.subject.infra.basic.service.SubjectMappingService;
+import com.itheima.subject.infra.basic.service.SubjectEsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -44,6 +42,9 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
 
     @Resource
     private SubjectLabelService subjectLabelService;
+
+    @Resource
+    private SubjectEsService subjectEsService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -72,6 +73,16 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
            });
         });
         subjectMappingService.batchInsert(mappingList);
+        //同步到es
+        SubjectInfoEs subjectInfoEs = new SubjectInfoEs();
+        subjectInfoEs.setDocId(new IdWorkerUtil(1, 1, 1).nextId());
+        subjectInfoEs.setSubjectId(subjectInfo.getId());
+        subjectInfoEs.setSubjectAnswer(subjectInfoBO.getSubjectAnswer());
+        subjectInfoEs.setCreateTime(new Date().getTime());
+        subjectInfoEs.setCreateUser("lqj");
+        subjectInfoEs.setSubjectName(subjectInfo.getSubjectName());
+        subjectInfoEs.setSubjectType(subjectInfo.getSubjectType());
+        subjectEsService.insert(subjectInfoEs);
     }
 
     @Override
@@ -90,7 +101,7 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
                 subjectInfoBO.getLabelId(), start, subjectInfoBO.getPageSize());
         List<SubjectInfoBO> subjectInfoBOS = SubjectInfoConverter.INSTANCE.convertInfoListToBoInfo(subjectInfoList);
         pageResult.setRecords(subjectInfoBOS);
-        pageResult.setTotalRecoredsNum(count);
+        pageResult.setTotal(count);
         return pageResult;
     }
 
@@ -112,6 +123,15 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
         });
         bo.setLabelName(labelName);
         return bo;
+    }
+
+    @Override
+    public PageResult<SubjectInfoEs> getSubjectPageBySearch(SubjectInfoBO subjectInfoBO) {
+        SubjectInfoEs subjectInfoEs = new SubjectInfoEs();
+        subjectInfoEs.setKeyWord(subjectInfoBO.getKeyWord());
+        subjectInfoEs.setPageNo(subjectInfoBO.getPageNo());
+        subjectInfoEs.setPageSize(subjectInfoBO.getPageSize());
+        return subjectEsService.querySubjectList(subjectInfoEs);
     }
 
 //    @Override

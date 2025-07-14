@@ -28,10 +28,15 @@ spring:
           enabled: true
         config:
           enabled: true
+  elasticsearch:
+    rest:
+      uris: http://192.168.79.135:9200
 
 publicKey: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKHEQNJ8kC7zGfbaS5Gy53ToSL0v7tGQfMwNcY4T8viN7QqIYOCoQk22kDefjFm9V3eMarRomLpi+zYaLJEkHFUCAwEAAQ==
 logging:
   config: classpath:log4j2-spring.xml
-#mybatis-plus:
-#  configuration:
-#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+es:
+  cluster:
+    esConfigs[0]:
+      name: 610119a868fb
+      nodes: 192.168.79.135:9200

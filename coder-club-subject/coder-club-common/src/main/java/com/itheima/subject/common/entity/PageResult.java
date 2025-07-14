@@ -12,29 +12,29 @@ public class PageResult<T> implements Serializable {
 
     private Integer pageSize = 20;
 
-    private Integer totalRecordsNum;
+    private Integer total;
 
-    private Integer totalPagesNum;
+    private Integer totalPages;
 
-    private List<T> records = Collections.emptyList();
+    private List<T> result = Collections.emptyList();
 
     private Integer start = 1;
 
     private Integer end = 0;
 
-    public void setRecords(List<T> records) {
-        this.records = records;
-        if (records.size() % pageSize == 0) {
-            setTotalRecoredsNum(records.size());
+    public void setRecords(List<T> result) {
+        this.result = result;
+        if (result.size() % pageSize == 0) {
+            setTotal(result.size());
         }
     }
 
-    public void setTotalRecoredsNum(int size) {
-        this.totalRecordsNum = size;
+    public void setTotal(int total) {
+        this.total = total;
         if (pageSize > 0) {
-            this.totalPagesNum = totalRecordsNum / pageSize + (totalRecordsNum % pageSize == 0 ? 0 : 1);
+            this.totalPages = total / pageSize + (total % pageSize == 0 ? 0 : 1);
         } else {
-            this.totalPagesNum = 0;
+            this.totalPages = 0;
         }
         this.start = (pageSize > 0 ? (pageNo - 1) * pageSize : 0) + 1;
         this.end = start - 1 + this.pageSize * (pageNo > 0 ? 1 : 0);

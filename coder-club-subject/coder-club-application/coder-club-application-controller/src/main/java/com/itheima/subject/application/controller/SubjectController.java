@@ -3,21 +3,16 @@ package com.itheima.subject.application.controller;
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Preconditions;
 import com.itheima.subject.application.convert.SubjectAnswerDTOConverter;
-import com.itheima.subject.application.convert.SubjectCategoryDTOConverter;
 import com.itheima.subject.application.convert.SubjectInfoDTOConverter;
-import com.itheima.subject.application.dto.SubjectCategoryDTO;
 import com.itheima.subject.application.dto.SubjectInfoDTO;
 import com.itheima.subject.common.entity.PageResult;
 import com.itheima.subject.common.entity.Result;
 import com.itheima.subject.domain.entity.SubjectAnswerBO;
-import com.itheima.subject.domain.entity.SubjectCategoryBO;
 import com.itheima.subject.domain.entity.SubjectInfoBO;
 import com.itheima.subject.domain.service.SubjectInfoDomainService;
-import com.itheima.subject.infra.basic.entity.SubjectCategory;
-import com.itheima.subject.infra.basic.service.SubjectCategoryService;
+import com.itheima.subject.infra.basic.entity.SubjectInfoEs;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -28,7 +23,7 @@ import java.util.List;
  */
 @RestController
 @Slf4j
-@RequestMapping("subject")
+@RequestMapping("/subject")
 public class SubjectController {
 
     @Resource
@@ -60,15 +55,17 @@ public class SubjectController {
         }
     }
 
-    @PostMapping("/querySubjectList")
+    @PostMapping("/getSubjectPage")
     public Result<PageResult<SubjectInfoDTO>> querySubjectList(@RequestBody SubjectInfoDTO subjectInfoDTO) {
         try {
             if (log.isInfoEnabled()) {
                 log.info("SubjectCategoryController.querySubjectList.dto: {}", JSON.toJSONString(subjectInfoDTO));
             }
             Preconditions.checkNotNull(subjectInfoDTO.getCategoryId(), "分类id不能为空");
-            Preconditions.checkNotNull(subjectInfoDTO.getSubjectDifficult(), "题目难度不能为空");
+            Preconditions.checkNotNull(subjectInfoDTO.getLabelId(), "标签id不能为空");
             SubjectInfoBO subjectInfoBO = SubjectInfoDTOConverter.INSTANCE.convertDtoToBo(subjectInfoDTO);
+            subjectInfoBO.setPageNo(subjectInfoDTO.getPageNo());
+            subjectInfoBO.setPageSize(subjectInfoDTO.getPageSize());
             PageResult<SubjectInfoBO> boPageResult = subjectInfoDomainService.getSubjectPage(subjectInfoBO);
             return Result.ok(boPageResult);
         } catch (Exception e) {
@@ -95,5 +92,25 @@ public class SubjectController {
         }
     }
 
+
+
+    @PostMapping("/getSubjectPageBySearch")
+    public Result<PageResult<SubjectInfoEs>> getSubjectPageBySearch(@RequestBody SubjectInfoDTO subjectInfoDTO) {
+        try {
+            if (log.isInfoEnabled()) {
+                log.info("SubjectCategoryController.getSubjectPageBySearch.dto: {}", JSON.toJSONString(subjectInfoDTO));
+            }
+            Preconditions.checkNotNull(subjectInfoDTO.getKeyWord(), "关键词不能为空");
+            SubjectInfoBO subjectInfoBO = SubjectInfoDTOConverter.INSTANCE.convertDtoToBo(subjectInfoDTO);
+            subjectInfoBO.setPageNo(subjectInfoDTO.getPageNo());
+            subjectInfoBO.setPageSize(subjectInfoDTO.getPageSize());
+            PageResult<SubjectInfoEs> boPageResult = subjectInfoDomainService.getSubjectPageBySearch(subjectInfoBO);
+            return Result.ok(boPageResult);
+        } catch (Exception e) {
+            log.error("SubjectCategoryController.getSubjectPageBySearch.error: {}", e.getMessage());
+            return Result.fail("全文检索失败");
+
+        }
+    }
 
 }
