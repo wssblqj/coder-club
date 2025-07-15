@@ -4,11 +4,13 @@ import com.alibaba.fastjson.JSON;
 import com.itheima.subject.common.entity.PageResult;
 import com.itheima.subject.common.enums.IsDeleteFlagEnum;
 import com.itheima.subject.common.util.IdWorkerUtil;
+import com.itheima.subject.common.util.LoginUtil;
 import com.itheima.subject.domain.convert.SubjectInfoConverter;
 import com.itheima.subject.domain.entity.SubjectInfoBO;
 import com.itheima.subject.domain.entity.SubjectOptionBO;
 import com.itheima.subject.domain.handler.subject.SubjectTypeHandler;
 import com.itheima.subject.domain.handler.subject.SubjectTypeHandlerFactory;
+import com.itheima.subject.domain.redis.RedisUtil;
 import com.itheima.subject.domain.service.SubjectInfoDomainService;
 import com.itheima.subject.infra.basic.entity.SubjectInfo;
 import com.itheima.subject.infra.basic.entity.SubjectInfoEs;
@@ -18,14 +20,16 @@ import com.itheima.subject.infra.basic.service.SubjectInfoService;
 import com.itheima.subject.infra.basic.service.SubjectLabelService;
 import com.itheima.subject.infra.basic.service.SubjectMappingService;
 import com.itheima.subject.infra.basic.service.SubjectEsService;
+import com.itheima.subject.infra.entity.UserInfo;
+import com.itheima.subject.infra.rpc.UserRpc;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -45,6 +49,13 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
 
     @Resource
     private SubjectEsService subjectEsService;
+    @Resource
+    private UserRpc userRpc;
+
+    @Resource
+    private RedisUtil redisUtil;
+
+    private static final String RANK_KEY = "subject_rank";
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -83,6 +94,9 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
         subjectInfoEs.setSubjectName(subjectInfo.getSubjectName());
         subjectInfoEs.setSubjectType(subjectInfo.getSubjectType());
         subjectEsService.insert(subjectInfoEs);
+
+        // 加入ZSet排行榜
+        redisUtil.addScore(RANK_KEY, LoginUtil.getLoginId(), 1);
     }
 
     @Override
@@ -134,46 +148,25 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
         return subjectEsService.querySubjectList(subjectInfoEs);
     }
 
-//    @Override
-//    public Boolean update(SubjectLabelBO subjectLabelBO) {
-//        if (log.isInfoEnabled()) {
-//            log.info("SubjectLabelDomainServiceImpl.update.bo: {}", JSON.toJSONString(subjectLabelBO));
-//        }
-//        SubjectLabel subjectLabel = SubjectLabelConverter.INSTANCE.convertBoToLabel(subjectLabelBO);
-//        return subjectlabelService.update(subjectLabel) > 0;
-//    }
-//
-//    @Override
-//    public Boolean delete(SubjectLabelBO subjectLabelBO) {
-//        if (log.isInfoEnabled()) {
-//            log.info("SubjectLabelDomainServiceImpl.delete.bo: {}", JSON.toJSONString(subjectLabelBO));
-//        }
-//        SubjectLabel subjectLabel = SubjectLabelConverter.INSTANCE.convertBoToLabel(subjectLabelBO);
-//        subjectLabel.setIsDeleted(IsDeleteFlagEnum.DELETED.getCode());
-//        return subjectlabelService.update(subjectLabel) > 0;
-//    }
-//
-//    @Override
-//    public List<SubjectLabelBO> queryLabelByCategoryId(SubjectLabelBO subjectLabelBO) {
-//        Long categoryId = subjectLabelBO.getCategoryId();
-//        SubjectMapping subjectMapping = new SubjectMapping();
-//        subjectMapping.setCategoryId(categoryId);
-//        subjectMapping.setIsDeleted(IsDeleteFlagEnum.UN_DELETED.getCode());
-//        List<SubjectMapping> mappingList = subjectMappingService.queryLabelId(subjectMapping);
-//        if (CollectionUtils.isEmpty(mappingList)) {
-//            return Collections.emptyList();
-//        }
-//        List<Long> labelIdList = mappingList.stream().map(SubjectMapping::getLabelId).collect(Collectors.toList());
-//        List<SubjectLabel> labelList = subjectlabelService.queryByIds(labelIdList);
-//        List<SubjectLabelBO> subjectLabelBOList = new ArrayList<>();
-//        labelList.forEach(label -> {
-//            SubjectLabelBO bo = new SubjectLabelBO();
-//            bo.setId(label.getId());
-//            bo.setLabelName(label.getLabelName());
-//            bo.setSortNum(label.getSortNum());
-//            bo.setCategoryId(categoryId);
-//            subjectLabelBOList.add(bo);
-//        });
-//        return subjectLabelBOList;
-//    }
+    @Override
+    public List<SubjectInfoBO> getContributeList() {
+        Set<ZSetOperations.TypedTuple<String>> typedTuples = redisUtil.rankWithScore(RANK_KEY, 0, 5);
+        if (log.isInfoEnabled()) {
+            log.info("getContributeList.typedTuples: {}", JSON.toJSONString(typedTuples));
+        }
+        if (CollectionUtils.isEmpty(typedTuples)) {
+            return Collections.emptyList();
+        }
+        List<SubjectInfoBO> boList = new LinkedList<>();
+        typedTuples.forEach(rank -> {
+            SubjectInfoBO subjectInfoBO = new SubjectInfoBO();
+            subjectInfoBO.setSubjectCount(rank.getScore().intValue());
+            UserInfo userInfo = userRpc.getUserInfo(rank.getValue());
+            subjectInfoBO.setCreateUser(userInfo.getNickName());
+            subjectInfoBO.setCreateUserAvatar(userInfo.getAvatar());
+            boList.add(subjectInfoBO);
+        });
+        return boList;
+    }
+
 }

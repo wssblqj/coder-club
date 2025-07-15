@@ -6,19 +6,16 @@ import com.google.common.base.Preconditions;
 import com.itheima.subject.application.convert.SubjectCategoryDTOConverter;
 import com.itheima.subject.application.convert.SubjectLabelDTOConverter;
 import com.itheima.subject.application.dto.SubjectCategoryDTO;
-import com.itheima.subject.application.dto.SubjectLabelDTO;
 import com.itheima.subject.common.entity.Result;
 import com.itheima.subject.common.util.LoginUtil;
 import com.itheima.subject.domain.entity.SubjectCategoryBO;
 import com.itheima.subject.domain.service.SubjectCategoryDomainService;
 import com.itheima.subject.infra.basic.entity.SubjectCategory;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.security.auth.Subject;
 import java.util.ArrayList;
 import java.util.List;
 

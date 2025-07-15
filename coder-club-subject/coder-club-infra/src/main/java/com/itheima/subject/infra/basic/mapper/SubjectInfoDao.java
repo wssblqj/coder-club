@@ -88,5 +88,7 @@ public interface SubjectInfoDao {
                                 @Param("labelId") Long labelId,
                                 @Param("start") int start,
                                 @Param("pageSize") int pageSize);
+
+    List<SubjectInfo> getContributeCount();
 }
 

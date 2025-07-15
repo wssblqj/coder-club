@@ -79,4 +79,22 @@ public class SubjectInfoDTO extends PageInfo implements Serializable {
      * 关键字
      */
     private String keyWord;
+
+
+    /**
+     * 创建用户
+     */
+    private String createUser;
+
+
+    /**
+     * 创建用户头像
+     */
+    private String createUserAvatar;
+
+
+    /**
+     * 题目数量
+     */
+    private Integer subjectCount;
 }

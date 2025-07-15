@@ -34,4 +34,11 @@ public interface SubjectInfoDomainService {
      * @return
      */
     PageResult<SubjectInfoEs> getSubjectPageBySearch(SubjectInfoBO subjectInfoBO);
+
+
+    /**
+     * 查询贡献者列表
+     * @return
+     */
+    List<SubjectInfoBO> getContributeList();
 }

@@ -93,6 +93,12 @@ public class SubjectController {
     }
 
 
+    /**
+     * 全文检索
+     *
+     * @param subjectInfoDTO
+     * @return
+     */
 
     @PostMapping("/getSubjectPageBySearch")
     public Result<PageResult<SubjectInfoEs>> getSubjectPageBySearch(@RequestBody SubjectInfoDTO subjectInfoDTO) {
@@ -109,6 +115,24 @@ public class SubjectController {
         } catch (Exception e) {
             log.error("SubjectCategoryController.getSubjectPageBySearch.error: {}", e.getMessage());
             return Result.fail("全文检索失败");
+
+        }
+    }
+
+
+    /**
+     * 获取题目贡献榜
+     */
+
+    @PostMapping("/getContributeList")
+    public Result<List<SubjectInfoDTO>> getContributeList() {
+        try {
+            List<SubjectInfoBO> boList = subjectInfoDomainService.getContributeList();
+            List<SubjectInfoDTO> dtoList = SubjectInfoDTOConverter.INSTANCE.convertBoListToDtoList(boList);
+            return Result.ok(dtoList);
+        } catch (Exception e) {
+            log.error("SubjectCategoryController.getContributeList.error: {}", e.getMessage());
+            return Result.fail("获取贡献榜失败");
 
         }
     }
