@@ -97,4 +97,16 @@ public class SubjectInfoDTO extends PageInfo implements Serializable {
      * 题目数量
      */
     private Integer subjectCount;
+
+
+    /**
+     * 是否已赞
+     */
+    private Boolean liked;
+
+
+    /**
+     * 赞的数量
+     */
+    private Integer likedCount;
 }

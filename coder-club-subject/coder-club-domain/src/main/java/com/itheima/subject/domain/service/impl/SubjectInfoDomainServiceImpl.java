@@ -12,6 +12,7 @@ import com.itheima.subject.domain.handler.subject.SubjectTypeHandler;
 import com.itheima.subject.domain.handler.subject.SubjectTypeHandlerFactory;
 import com.itheima.subject.domain.redis.RedisUtil;
 import com.itheima.subject.domain.service.SubjectInfoDomainService;
+import com.itheima.subject.domain.service.SubjectLikedDomainService;
 import com.itheima.subject.infra.basic.entity.SubjectInfo;
 import com.itheima.subject.infra.basic.entity.SubjectInfoEs;
 import com.itheima.subject.infra.basic.entity.SubjectLabel;
@@ -46,6 +47,9 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
 
     @Resource
     private SubjectLabelService subjectLabelService;
+
+    @Resource
+    private SubjectLikedDomainService subjectLikedDomainService;
 
     @Resource
     private SubjectEsService subjectEsService;
@@ -136,6 +140,8 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
             labelName.add(subjectLabel.getLabelName());
         });
         bo.setLabelName(labelName);
+        bo.setLiked(subjectLikedDomainService.isLiked(subjectInfo.getId().toString(), LoginUtil.getLoginId()));
+        bo.setLikedCount(subjectLikedDomainService.getLikedCount(subjectInfo.getId().toString()));
         return bo;
     }
 
