@@ -61,3 +61,17 @@ es:
     esConfigs[0]:
       name: 610119a868fb
       nodes: 192.168.79.135:9200
+
+xxl:
+  job:
+    admin:
+      addresses: http://localhost:8080/xxl-job-admin
+      accessToken: default_token
+    executor:
+      appName: coder-club-subject
+      address:
+      ip: 127.0.0.1
+      port: 9999
+      logPath: /data/applogs/xxl-job/jobhandler
+      logRetentionDays: 30
+
