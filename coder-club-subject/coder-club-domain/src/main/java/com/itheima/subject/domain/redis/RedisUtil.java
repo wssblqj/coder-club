@@ -1,11 +1,15 @@
 package com.itheima.subject.domain.redis;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -120,4 +124,14 @@ public class RedisUtil {
         redisTemplate.opsForValue().increment(key, value);
     }
 
+    public Map<Object, Object> getHashAndDelete(String subjectLikedKey) {
+        Map<Object, Object> map = new HashMap<>();
+        Cursor<Map.Entry<Object, Object>> cursor = redisTemplate.opsForHash().scan(subjectLikedKey, ScanOptions.NONE);
+        while (cursor.hasNext()) {
+            Map.Entry<Object, Object> entry = cursor.next();
+            map.put(entry.getKey(), entry.getValue());
+            redisTemplate.opsForHash().delete(subjectLikedKey, entry.getKey());
+        }
+        return map;
+    }
 }

@@ -14,9 +14,13 @@ import com.itheima.subject.infra.basic.entity.SubjectLiked;
 import com.itheima.subject.infra.basic.service.SubjectInfoService;
 import com.itheima.subject.infra.basic.service.SubjectLikedService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.MapUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -99,7 +103,22 @@ public class SubjectLikedDomainServiceImpl implements SubjectLikedDomainService 
 
     @Override
     public void syncLiked() {
-
+        Map<Object, Object> subjectLikedMap = redisUtil.getHashAndDelete(SUBJECT_LIKED_KEY);
+        if (log.isInfoEnabled()) {
+            log.info("syncLiked:{}", JSON.toJSONString(subjectLikedMap));
+        }
+        if(MapUtils.isEmpty(subjectLikedMap)) {
+            return;
+        }
+        List<SubjectLiked> subjectLikedList = new LinkedList<>();
+        subjectLikedMap.forEach((key, value) -> {
+            SubjectLiked subjectLiked = new SubjectLiked();
+            subjectLiked.setSubjectId(Long.valueOf(key.toString().split(":")[0]));
+            subjectLiked.setLikeUserId(key.toString().split(":")[1]);
+            subjectLiked.setStatus(Integer.valueOf(value.toString()));
+            subjectLikedList.add(subjectLiked);
+        });
+        subjectLikedService.batchInsert(subjectLikedList);
     }
 
     @Override
