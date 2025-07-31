@@ -63,4 +63,14 @@ public interface SubjectInfoService {
      * @return
      */
     List<SubjectInfo> getContributeCount();
+
+    /**
+     * 获取题目游标
+     * @param subjectId
+     * @param categoryId
+     * @param labelId
+     * @param i
+     * @return
+     */
+    Long querySubjectCursor(Long subjectId, Long categoryId, Long labelId, int i);
 }

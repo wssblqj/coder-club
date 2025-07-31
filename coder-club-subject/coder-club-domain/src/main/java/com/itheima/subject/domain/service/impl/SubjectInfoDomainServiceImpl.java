@@ -142,7 +142,21 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
         bo.setLabelName(labelName);
         bo.setLiked(subjectLikedDomainService.isLiked(subjectInfo.getId().toString(), LoginUtil.getLoginId()));
         bo.setLikedCount(subjectLikedDomainService.getLikedCount(subjectInfo.getId().toString()));
+        assembleSubjectCursor(subjectInfoBO, bo);
         return bo;
+    }
+
+    private void assembleSubjectCursor(SubjectInfoBO subjectInfoBO, SubjectInfoBO bo) {
+        Long categoryId = subjectInfoBO.getCategoryId();
+        Long labelId = subjectInfoBO.getLabelId();
+        Long subjectId = subjectInfoBO.getId();
+        if (Objects.isNull(categoryId) || Objects.isNull(labelId)) {
+            return;
+        }
+        Long nextSubjectId = subjectInfoService.querySubjectCursor(subjectId, categoryId, labelId, 1);
+        bo.setNextSubjectId(nextSubjectId);
+        Long lastSubjectId = subjectInfoService.querySubjectCursor(subjectId, categoryId, labelId, 0);
+        bo.setLastSubjectId(lastSubjectId);
     }
 
     @Override
