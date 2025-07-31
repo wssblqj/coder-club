@@ -116,6 +116,7 @@ public class SubjectLikedDomainServiceImpl implements SubjectLikedDomainService 
             subjectLiked.setSubjectId(Long.valueOf(key.toString().split(":")[0]));
             subjectLiked.setLikeUserId(key.toString().split(":")[1]);
             subjectLiked.setStatus(Integer.valueOf(value.toString()));
+            subjectLiked.setIsDeleted(IsDeleteFlagEnum.UN_DELETED.getCode());
             subjectLikedList.add(subjectLiked);
         });
         subjectLikedService.batchInsert(subjectLikedList);
@@ -123,7 +124,25 @@ public class SubjectLikedDomainServiceImpl implements SubjectLikedDomainService 
 
     @Override
     public PageResult<SubjectLikedBO> getSubjectLikedPage(SubjectLikedBO subjectLikedBO) {
-        return null;
+        PageResult<SubjectLikedBO> pageResult = new PageResult<>();
+        pageResult.setPageNo(subjectLikedBO.getPageNo());
+        pageResult.setPageSize(subjectLikedBO.getPageSize());
+        int start = (subjectLikedBO.getPageNo() - 1) * subjectLikedBO.getPageSize();
+        SubjectLiked subjectLiked = SubjectLikedConverter.INSTANCE.convertBOToEntity(subjectLikedBO);
+        subjectLiked.setLikeUserId(LoginUtil.getLoginId());
+        int count = subjectLikedService.countByCondition(subjectLiked);
+        if (count == 0) {
+            return pageResult;
+        }
+        List<SubjectLiked> subjectLikedList = subjectLikedService.queryPage(subjectLiked, start, subjectLikedBO.getPageSize());
+        List<SubjectLikedBO> subjectLikedBOList = SubjectLikedConverter.INSTANCE.convertListInfoToBO(subjectLikedList);
+        subjectLikedBOList.forEach(bo -> {
+            SubjectInfo subjectInfo = subjectInfoService.queryById(bo.getSubjectId());
+            bo.setSubjectName(subjectInfo.getSubjectName());
+        });
+        pageResult.setRecords(subjectLikedBOList);
+        pageResult.setTotal(count);
+        return pageResult;
     }
 
     @Override
